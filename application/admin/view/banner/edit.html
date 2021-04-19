@@ -1,0 +1,116 @@
+{include file="public/header" /}
+<style type="text/css">
+	.img{cursor: pointer;}
+</style>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Banner/edit')}">轮播图修改</a>
+		 
+		</span>
+	
+		
+	<form class="layui-form" action="" style="margin-top: 20px;">
+	<input type="hidden" name="pic" id="pic" value="{$find.pic}"><!-- 隐藏域给默认值 -->
+	<input type="hidden" name="id" value="{$find.id}"><!-- 修改条件 -->
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">名称</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="name" required  lay-verify="required" placeholder="请输入轮播图名称" autocomplete="off" class="layui-input" value="{$find.name}">
+	    </div>
+	  </div>
+
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">轮播类型</label>
+	    <div class="layui-input-block">
+      		<select name="type" lay-verify="required" >
+      			<option></option>
+      			<option value="1" {eq name="find.type" value="1"}selected{/eq}>PC端</option>
+      			<option value="2" {eq name="find.type" value="2"}selected{/eq}>公众号</option>
+      			<option value="3" {eq name="find.type" value="3"}selected{/eq}>小程序</option>
+      		</select>
+	    </div>
+	  </div>
+
+	 <div class="layui-form-item">
+	 <label class="layui-form-label">图片</label>
+		 <div class="layui-input-block">
+		  <button type="button" class="layui-btn" id="test1">上传图片</button>
+		  <div class="layui-upload-list">
+		    <img class="layui-upload-img" id="demo1" width="92" src="{$find.pic}">
+		    <p id="demoText"></p>
+		  </div>
+		</div>   
+	</div>  
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="button" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+	</form>
+
+	<script>
+			//Demo
+			layui.use(['form','jquery','upload'], function(){
+			  var form = layui.form,$=layui.jquery,upload = layui.upload;
+			 
+			 //普通图片上传
+			  var uploadInst = upload.render({
+			    elem: '#test1'
+			    ,url: '{:url("Banner/upload")}' //改成您自己的上传接口
+			    ,before: function(obj){
+			      //预读本地文件示例，不支持ie8
+			      obj.preview(function(index, file, result){
+			        $('#demo1').attr('src', result); //图片链接（base64）
+			      });
+			    }
+			    ,done: function(res){
+			    	//上传成功
+			      if(res.code == 1){
+			        $('#pic').val(res.msg);//更改隐藏域的value值
+			      }else{
+			      	layer.msg(res.msg);
+			      }
+			      
+			    }
+			    ,error: function(){
+			      //演示失败状态，并实现重传
+			      var demoText = $('#demoText');
+			      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+			      demoText.find('.demo-reload').on('click', function(){
+			        uploadInst.upload();
+			      });
+			    }
+			  });
+  		
+			  //监听提交
+			  form.on('submit(formDemo)', function(data){
+			  if ($('#pic').val()=='') {
+			  	layer.msg("请上传图片");
+			  	return false;
+			  }
+			  	var data=JSON.stringify(data.field);
+			   $.post("{:url('Banner/edit')}",{'data':data},function(res){
+			   	if (res.code==1) {
+			   		layer.msg(res.msg,{icon:1,time:500},function(){
+			   			window.location.href="{:url('Banner/index')}";
+			   		})
+			   	}else{
+			   		layer.msg(res.msg);
+			   	}
+			   })
+			    return false;
+			  });
+			});
+			
+
+	</script>
+			 
+	</div>
+  </div>
+  
+{include file="public/footer" /}

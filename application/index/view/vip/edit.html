@@ -1,0 +1,153 @@
+{include file="public/header"/}
+    <link rel="stylesheet" type="text/css" href="css/member.css">
+    <link rel="stylesheet" type="text/css" href="css/sub_nav.css">
+    <link rel="stylesheet" type="text/css" href="css/modify.css">
+    <link rel="stylesheet" type="text/css" href="css/modify_password.css">
+
+    <script src="js/modify_password.js"></script>
+
+    <div class="middle">
+        <div class="container clear">
+            <div class="sub-nav fl">
+                <dl>
+                    <dt><a href="#">设置</a></dt>
+                    <dd><a href="{:url('Vip/info')}">个人信息</a></dd>
+                    <dd><a href="#">账号绑定</a></dd>
+                    <dd class="on"><a href="{:url('Vip/edit')}">账户安全</a></dd>
+                    <dd><a href="#">我的等级</a></dd>
+                    <dd><a href="shipping_address.html">收货地址</a></dd>
+                    <dd><a href="#">消费记录</a></dd>
+                    <dd><a href="#">快捷支付</a></dd>
+                    <dd><a href="#">应用授权</a></dd>
+                </dl>
+            </div>
+            <div class="content fl">
+                <div class="head-nav">
+                    <a class="on" >修改密码</a>
+                    <a>添加密保</a>
+                </div>
+                <div class="box">
+                    <div class="fr">
+                        <img class="fl" src="{$info.pic.0}" alt="">
+                        <h2>用户名：{$info.nickname}</h2>
+                        <p>购物行为评级：<span></span><span></span><span></span></p>
+                        <p>会员类型：高级会员</p>
+                        <div class="clear"></div>
+                        <p>注：修改手机和邮箱请到<a href="{:url('Vip/edit')}">账户安全</a></p>
+                    </div>
+                    <div class="tab">
+                        <form class="layui-form" >
+                            <div>
+                                <label for="">账号：</label><input type="text" name="user" value="" lay-verify="required" placeholder="请输入手机号或邮箱号">
+                            </div>
+                            <div>
+                                <label for="">手机号码：</label><input type="tel" name="" value="" lay-verify="required|phone" placeholder="请输入正确手机号" id="tel1"><button type="button" id="smscode" onclick="sendsms(this)">获取验证码</button>
+                            </div>
+                            <div>
+                                <label for="">验证码：</label><input type="text" name="" value="" lay-verify="required|number" placeholder="请输入验证码" id="smscode">
+                            </div>
+                            <div>
+                                <label for="">原密码：</label><input type="password" name="oldpwd" value="" lay-verify="required|pass" placeholder="请输入原密码">
+                            </div>
+                            <div>
+                                <label for="">新密码：</label><input type="password" name="pwd" value="" lay-verify="required|newpass" placeholder="请输入新密码">
+                            </div>
+                            <button  type="button" class="btn" class="layui-btn" lay-submit="" lay-filter="formDemo">提交</button>
+                        </form>
+                    </div>
+                    <div class="tab">
+                        <form>
+                            <div>
+                                <label for="">密保：</label><input type="text" name="" value="" required>
+                            </div>
+                            <div>
+                                <label for="">手机号码：</label><input type="tel" name="" value="" required><a class="check" href="">获取验证码</a>
+                            </div>
+                            <div>
+                                <label for="">验证码：</label><input type="text" name="" value="" required>
+                            </div>
+                            <div>
+                                <label for="">新密码：</label><input type="password" name="" value="" required>
+                            </div>
+                            <div>
+                                <label for="">再输入密码：</label><input type="password" name="" value="" required>
+                            </div>
+                            <button class="btn" type="submit" class="layui-btn" lay-submit lay-filter="formDemo2">提交</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+layui.use(['form','jquery'], function(){
+    var form = layui.form;
+    //自定义验证规则
+    form.verify({
+        pass: function(value){
+          if(value!=''){
+           var reg = /^[\S]{5,12}$/;
+           if(!reg.test(value)){
+            return '密码必须5到12位，且不能出现空格';
+           }
+          }
+        }
+        ,newpass: function(value){
+          if(value!=''){
+           var old = $('input[name="oldpwd"]').val();
+           if(old==value){
+            return '不能与原密码一致';
+           }
+          }
+        }
+    });
+    //提交
+    form.on('submit(formDemo)',function(data){
+        var val = JSON.stringify(data.field);
+        $.post("{:url('Vip/edit')}",{'data':val},function(res){
+            if (res.code == 1) {
+                layer.msg('修改成功');
+
+            }else{
+                layer.msg(res.msg);
+            }
+        })
+    })
+});    
+    var countdown = 60;
+    //短信
+    function sendsms(){
+        //手机短信  
+        var tel= $('#tel1').val();
+        var reg = /^1[3|4|5|6|7|8|9][0-9]{9}$/;
+        if (tel==''||!reg.test(tel)) {
+            layer.msg("请输入正确手机号");
+            return false;
+        }
+        $.post("{:url('User/sendsms')}",{'tel':tel},function(res){
+            if (res.code==1) {
+                settime();
+            }
+        })
+
+    }
+    //倒计时
+    function settime() {
+        if (countdown == 0) {
+            $('#smscode').attr("disabled",false);
+            $('#smscode').html("免费获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            $('#smscode').attr("disabled", true);
+            $('#smscode').html("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function() {
+            settime() }
+            ,1000)
+       
+    }
+
+</script>
+{include file="public/footer"/}

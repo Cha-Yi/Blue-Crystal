@@ -1,0 +1,78 @@
+{include file="public/header" /}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;" class="layui-form">
+   
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Order/index')}">订单列表</a>
+		 
+		</span>
+		<table class="layui-table">
+		 
+		  <thead>
+		    <tr>
+		      <th>编号</th>
+		      <th>订单编号</th>
+		      <th>订单价格</th>
+		      <th>下单用户</th>
+		      <th>订单状态</th>
+		      <th>下单时间</th>    
+		      <th>操作</th>
+
+		    </tr> 
+		  </thead>
+		  <tbody style="color: #000;">
+			
+		{foreach $list as $vo} 
+		    <tr>
+		      <td>{$vo.id}</td>
+		      <td>{$vo.order_num}</td>
+		      <td style="color: red;">￥{$vo.sumtotal}</td>		  	  
+		  	  <td>{$vo.user}</td>
+		  	  <td>
+				{switch name="vo.status" }
+				    {case value="1"}<font style="color: blue;">待支付</font>{/case}
+				    {case value="2"}<font style="color: red;">待发货</font>{/case}
+				    {case value="3"}待收货{/case}
+					{case value="4"}待评价{/case}
+					{case value="5"}<font style="color: green;">交易成功</font>{/case} 
+				{/switch}
+		  	  </td>
+		  	  <td>
+		  	  	{$vo.time|date="Y-m-d h:i:s",###}
+		  	  </td>
+		      <td>
+		      	<a href="{:url('Order/edit',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon layui-icon-read"></i>查看</a>
+		      </td>
+		    </tr>
+		  {/foreach}
+		  </tbody>
+		</table>
+		<!-- 分页 -->
+		<div id="test1" style="text-align: center">
+
+          {$list->render()}
+
+		</div>
+	
+	</div>
+  </div>
+  
+  <script>
+layui.use(['form','jquery'], function(){
+  var form = layui.form
+  ,layer = layui.layer,$=layui.jquery;
+  
+  //监听指定开关
+  form.on('switch(switchTest)', function(data){
+     var check=this.checked?1:0;
+     var id = data.elem.value;//当前的id,从data中拿
+     	$.post("{:url('Order/recommend')}",{'id':id,'allow':check},function(res){
+     		layer.msg(res.msg)
+     	})
+
+  });
+});
+</script>
+{include file="public/footer" /}

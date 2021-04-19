@@ -1,0 +1,77 @@
+{include file="public/header" /}
+<style type="text/css">
+	.img{cursor: pointer;}
+</style>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		 
+		</span>
+	
+  
+ <form class="layui-form" action="" style="margin-top: 20px;">
+
+  <input type="hidden" name="id" value="{$find.id}">
+  
+  <div class="layui-form-item">
+      <label class="layui-form-label">昵称</label>
+      <div class="layui-input-block">
+        <input type="text" name="nickname" disabled  autocomplete="off" class="layui-input" value="{eq name='info.nickname' value=''}未设置{else/}{$info.nickname}{/eq}">
+      </div>
+  </div>
+  <div class="layui-form-item">
+      <label class="layui-form-label">邮箱号</label>
+      <div class="layui-input-block">
+        <input type="text" name="email" disabled  lay-verify="required" autocomplete="off" class="layui-input" value="{eq name='info.email' value=''}未设置{else/}{$info.email}{/eq}">
+      </div>
+  </div>
+  <div class="layui-form-item">
+      <label class="layui-form-label">电话号</label>
+      <div class="layui-input-block">
+        <input type="text" name="tel" disabled  lay-verify="required" autocomplete="off" class="layui-input" value="{eq name='info.tel' value=''}未设置{else/}{$info.tel}{/eq}">
+      </div>
+  </div>
+  <div class="layui-form-item">
+      <label class="layui-form-label">真实姓名</label>
+      <div class="layui-input-block">
+        <input type="text" name="name" disabled  lay-verify="required" autocomplete="off" class="layui-input" value="{eq name='info.name' value=''}未设置{else/}{$info.name}{/eq}">
+      </div>
+  </div>
+  <div class="layui-form-item">
+      <label class="layui-form-label">生日</label>
+      <div class="layui-input-block">
+        <input type="text" name="birthday" disabled  lay-verify="required" autocomplete="off" class="layui-input" value="{eq name='info.birthday' value=''}未设置{else/}{$info.birthday}{/eq}">
+      </div>
+  </div>
+  <div class="layui-form-item">
+      <label class="layui-form-label">性别</label>
+      <div class="layui-input-block">
+        <input type="text" name="sex" disabled  lay-verify="required" autocomplete="off" class="layui-input" value="{eq name='info.sex' value='1'}男{else/}女{/eq}">
+      </div>
+  </div>
+  <div class="layui-form-item">
+      <label class="layui-form-label">详细地址</label>
+      <div class="layui-input-block">
+        <input type="text" name="address" disabled  lay-verify="required" autocomplete="off" class="layui-input" value="{eq name='info.address' value=''}未设置{else/}{$info.address}{/eq}">
+      </div>
+  </div>
+  <div class="layui-form-item">
+      <div class="layui-input-block">
+        <a href="{:url('Order/index')}" class="layui-btn layui-btn-sm"><i class="layui-icon layui-icon-return"></i> 返回</a>
+      </div>
+  </div>
+ </form>
+  <script>
+  	layui.use(['form','jquery'], function(){
+    var form = layui.form;
+    var $ = layui.jquery;
+
+  
+  });
+  </script>
+  </div>
+</div>
+{include file="public/footer" /}

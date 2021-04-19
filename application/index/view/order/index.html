@@ -1,0 +1,133 @@
+{include file="public/header"/}
+
+    <link rel="stylesheet" type="text/css" href="css/member.css">
+    <link rel="stylesheet" type="text/css" href="css/sub_nav.css">
+    <link rel="stylesheet" type="text/css" href="css/order.css">
+
+    <script src="js/order.js"></script>
+
+    <div class="middle">
+        <div class="container clear">
+            <div class="sub-nav fl">
+                <dl>
+                    <dt><a >订单中心</a></dt>
+                    <dd class="on"><a href="order.html">我的订单</a></dd>
+                    <dd><a href="#">团购订单</a></dd>
+                    <dd><a href="#">我的预售</a></dd>
+                    <dd><a href="#">评价晒单</a></dd>
+                    <dd><a href="#">取消订单记录</a></dd>
+                </dl>
+            </div>
+            <div class="content fl">
+                <h1>我的订单</h1>
+                <div class="box">
+                <form action="" >
+                    <div class="search">
+                        <input type="text" name="order_num"  placeholder="请输入商品订单号"><button>搜索</button>
+                    </div>
+                </form>
+                    <div class="top-nav">
+                        <span {eq name="status" value="0"}class="on"{/eq}><a href="{:url('Order/index')}">全部订单</a></span>
+                        <span {eq name="status" value="1"}class="on"{/eq}><a href="{:url('Order/index',['status'=>1])}">待付款</a>{eq name="status" value="1"}<i>{$count}</i>{/eq}</span>
+                        <span {eq name="status" value="2"}class="on"{/eq}><a href="{:url('Order/index',['status'=>2])}">待发货</a>{eq name="status" value="2"}<i>{$count}</i>{/eq}</span>
+                        <span {eq name="status" value="3"}class="on"{/eq}><a href="{:url('Order/index',['status'=>3])}">待收货</a>{eq name="status" value="3"}<i>{$count}</i>{/eq}</span>
+                        <span {eq name="status" value="4"}class="on"{/eq}><a href="{:url('Order/index',['status'=>4])}">待评价</a>{eq name="status" value="4"}<i>{$count}</i>{/eq}</span>
+                        <span {eq name="status" value="5"}class="on"{/eq}><a href="{:url('Order/index',['status'=>5])}">交易完成</a></span>
+                    </div>
+                    <div class="tab">
+                        <div class="thead">
+                            <h2 class="fl">全部订单<img src="images/common/down_icon.png" alt=""></h2>
+                            <span>订单详情</span>
+                            <span>收货人</span>
+                            <span>总计</span>
+                            <span>全部状态<img src="images/common/down_icon.png" alt=""></span>
+                            <span>操作</span>
+                        </div>
+                        <div class="tbody">
+                            {volist name="orderarr" id="vo"}
+                            <div class="item clear">
+                                <p>{$vo.time|date="Y-m-d h:i:s",###}<span></span>订单号：{$vo.order_num}</p>
+                                <div class="clear fl">
+                                {volist name="vo['order_info']" id="sub"}
+                                    <div class="info fl">
+                                        <a href="{:url('Goods/info',['id'=>$sub.gid])}"><img class="fl" src="{$sub.pic}" alt=""></a>
+                                        <p class="fl"><a href="{:url('Goods/info',['id'=>$sub.gid])}">{$sub.name}</a></p>
+                                        <span class="num fl">x{$sub.num}</span>
+                                        <p><a href="#">返修</a>/<a href="#">退换货</a></p>
+                                    </div>
+                                {/volist}
+                                </div>
+                                <div>
+                                    <div class="table">
+                                        {$vo.a_name}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="table" style="color: red;">
+                                        ￥{$vo.sumtotal}
+                                    </div>
+                                </div>
+                                <div class="sm-font">
+                                    <div class="table">
+                                        <p class="state">
+                                            {switch name="vo.status" }
+                                                {case value="1"}<font style="color: green">待支付</font><br/>
+                                                    {eq name="vo.status" value="1"}
+                                                    <a href="javascript:void(0)" class="cancel" iid="{$vo.id}"><font style="color: red">取消订单</font></a>
+                                                    {/eq}
+                                                {/case}
+                                                {case value="2"}待发货{/case}
+                                                {case value="3"}待收货{/case}
+                                                {case value="4"}待评价{/case}
+                                                {case value="5"}交易完成{/case}
+                                                {case value="6"}交易已取消{/case}      
+                                            {/switch}
+                                        </p>
+                                        
+                                    </div>
+                                </div>
+                                <div class="sm-font">
+                                    <div class="table">
+                                        <p><a href="#">评价晒单</a></p>
+                                        <p><a href="{:url('Goods/info',['id'=>$sub.gid])}">再次购买</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                           {/volist}
+                        </div>
+                        <div class="bottom-nav">
+                           {$order->render()}
+                        </div>
+                    </div>
+                    <div class="tab">
+
+                    </div>
+                    <div class="tab">
+                        
+                    </div>
+                    <div class="tab">
+                        
+                    </div>
+                    <div class="tab">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    layui.use(['layer'],function(){
+        $('.cancel').click(function(){
+            var iid = $(this).attr('iid');
+            $.post("{:url('Order/cancel')}",{'iid':iid},function(res){
+                if (res.code == 1) {
+                    layer.msg("取消成功");
+                    window.location.reload();
+                }else{
+                    layer.msg("操作失败");
+                }
+            })
+        })
+    })
+</script>
+    {include file="public/footer"/}

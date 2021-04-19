@@ -1,0 +1,90 @@
+{include file="public/header" /}
+<style type="text/css">
+	.img{cursor: pointer;}
+</style>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Level/index')}">角色列表</a> 
+		</span>
+	
+	<form class="layui-form" action="" style="margin-top: 20px;">
+<input type="hidden" name="id" value="{$find.id}">
+  	<div class="layui-form-item">
+	    <label class="layui-form-label">角色名称</label>
+	    <div class="layui-input-block">
+	      <input type="text"  required  lay-verify="required|" placeholder="请输入管理员角色名称" autocomplete="off" class="layui-input" value="{$find.level_name}" disabled>
+	    </div>
+	</div>
+
+    <div class="layui-form-item" >
+	    <label class="layui-form-label">角色权限</label>
+	    <div class="layui-input-block menu_level">
+	    {volist name="menu" id="vo"}
+	      {volist name="vo['child']" id="s"}
+	        <input type="checkbox" name="menu_level" value="{$s.id}" title="{$s.menu_name}" lay-filter="checktest" {in name="s.id" value="$find.menu_level"}checked{/in}>
+	      {/volist}
+	    {/volist}
+	    </div>
+    </div>
+
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="button" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+	</form>
+		<script>
+			layui.use(['form','jquery','upload'], function(){
+			  var form = layui.form,$=layui.jquery
+			  ,arr=[];
+			  $('.menu_level input[type="checkbox"]').each(function(index){
+			  		if ($('.menu_level input[type="checkbox"]').eq(index).prop('checked')) {
+			  			arr.push($('.menu_level input[type="checkbox"]').eq(index).val());
+			  		}//判断是否是勾选 有添加
+			  });
+			  
+		  	  //监听提交复选框
+		  	   form.on('checkbox(checktest)', function(data){
+		  	   		var check= this.checked;//选中
+		  	   		var val =data.value;//复选框的值
+		  	   		if (check) {
+		  	   			arr.push(val);//判断是否选中
+		  	   		}else{
+		  	   			var index= $.inArray(val,arr);//获取元素的位置
+		  	   			arr.splic(index,1);//splic删除某个值
+		  	   		}
+		  	   })
+
+			  //监听提交
+			  form.on('submit(formDemo)', function(data){
+			  	var len= $('.menu_level input[type="checkbox"]').length;//获取checkbox的总长
+			  	if (arr=='') {
+			  		layer.msg("请勾选权限");
+			  		return false;
+			  	}else if (arr.length==len) {
+			  		layer.msg("超出权限");
+			  		return false;
+			  	}
+			  	var str = arr.join("|");//转字符串
+			   $.post("{:url('Level/edit')}",{'id':"{$find.id}",'menu_level':str},function(res){
+			   	if (res.code==1) {
+			   		layer.msg(res.msg,{icon:1,time:500},function(){
+			   			window.location.href="{:url('Level/index')}";
+			   		})
+			   	}else{
+			   		layer.msg(res.msg);
+			   	}
+			   })
+			    return false;
+			  });
+			});
+			</script> 
+	</div>
+  </div>
+  
+{include file="public/footer" /}

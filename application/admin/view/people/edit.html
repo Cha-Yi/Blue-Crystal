@@ -1,0 +1,55 @@
+{include file="public/header" /}
+<style type="text/css">
+	.img{cursor: pointer;}
+</style>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('People/edit')}">人群修改</a>
+		 
+		</span>
+	
+	<form class="layui-form" action="" style="margin-top: 20px;">
+    <input type="hidden" value="{$find.id} " name="id">
+
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">适用人群</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="name" required  lay-verify="required" placeholder="请输入适用人群名称" autocomplete="off" class="layui-input" value="{$find.name}">
+	    </div>
+	  </div>
+
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="button" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+	</form>
+		<script>
+			layui.use(['form','jquery','upload'], function(){
+			  var form = layui.form,$=layui.jquery;
+		  
+			  //监听提交
+			  form.on('submit(formDemo)', function(data){
+			  	var data=JSON.stringify(data.field)
+			   $.post("{:url('People/edit')}",{'data':data},function(res){
+			   	if (res.code==1) {
+			   		layer.msg(res.msg,{icon:1,time:500},function(){
+			   			window.location.href="{:url('People/index')}";
+			   		})
+			   	}else{
+			   		layer.msg(res.msg);
+			   	}
+			   })
+			    return false;
+			  });
+			});
+			</script> 
+	</div>
+  </div>
+  
+{include file="public/footer" /}

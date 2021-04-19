@@ -1,0 +1,218 @@
+{include file="public/header" /}
+<style type="text/css">
+	.img{cursor: pointer;}
+</style>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Goods/index')}">商品列表</a>
+		 
+		</span>
+	
+		
+	<form class="layui-form" action="" style="margin-top: 20px;">
+	<input type="hidden" name="pic" id="pic">
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">商品名称</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="name" required  lay-verify="required" placeholder="请输入商品名称" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+	   <div class="layui-form-item">
+	    <label class="layui-form-label">商品单价</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="price" required  lay-verify="required|number" placeholder="请输入商品单价" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+	  <div class="layui-form-item">
+	   <label class="layui-form-label">商品图片</label>
+	    <div class="layui-input-block">
+	  <div class="layui-upload">
+		  <button type="button" class="layui-btn" id="test2">多图片上传</button> 
+		  <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+		    预览图：
+		    <div class="layui-upload-list" id="demo2"></div>
+		 </blockquote>
+	  </div>
+	  </div>
+	  </div>
+
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">商品分类</label>
+	    <div class="layui-input-block">
+	      <select name="cid" lay-verify="required">
+			<option value=""></option>
+		{volist name="cate" id="vo"}
+		  	<option value="{$vo.id}">{$vo.name}</option>
+		{/volist}
+	       
+	      </select>
+	    </div>
+	  </div>
+	  
+	 <div class="layui-form-item">
+	    <label class="layui-form-label">商品品牌</label>
+	    <div class="layui-input-block">
+	      <select name="bid" lay-verify="required">
+	        <option value=""></option>
+	   	{volist name="brand" id="vo"}
+		  	<option value="{$vo.id}">{$vo.name}</option>
+		{/volist}
+	      </select>
+	    </div>
+	  </div>
+
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">适用人群</label>
+	    <div class="layui-input-block">
+	      <select name="peo_id" lay-verify="required">
+			<option value=""></option>
+		{volist name="people" id="vo"}
+		  	<option value="{$vo.id}">{$vo.name}</option>
+		{/volist}
+	       
+	      </select>
+	    </div>
+	   </div>
+	  
+	   <div class="layui-form-item">
+	    <label class="layui-form-label">商品模块</label>
+	    <div class="layui-input-block">
+	      <select name="nid" lay-verify="required">
+	        <option value=""></option>
+	    {volist name="nav" id="vo"}
+		  	<option value="{$vo.id}">{$vo.menu_name}</option>
+		{/volist}
+	      </select>
+	    </div>
+	   </div>
+	   <div class="layui-form-item">
+	    <label class="layui-form-label">商品库存</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="count" required  lay-verify="required|number" placeholder="请输入商品单价" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+	  <div class="layui-form-item key attr">
+	    <label class="layui-form-label">商品属性</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="attrname[]" required  lay-verify="required" placeholder="例如:颜色" autocomplete="off" class="layui-input" style="display: inline-block; width: 130px">
+	      <input type="text" name="val[]" required  lay-verify="required" placeholder="例如:红色|白色" autocomplete="off" class="layui-input" style="display: inline-block; width: 220px">
+	      <button class="layui-btn layui-btn-normal layui-btn-sm clone" type="button"><i class="layui-icon">&#xe624;</i></button>
+	    </div>
+	  </div>
+
+	  <div class="layui-form-item layui-form-text" style="position: relative;z-index: 1;">
+	    <label class="layui-form-label">商品详情</label>
+	    <div class="layui-input-block">
+	      <script id="container" name="into" type="text/plain">
+          </script>
+	    </div>
+	  </div>
+
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="button" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+	</form>
+<script type="text/javascript" src="admin/js/jquery.min.js"></script>
+ <!-- 配置文件 -->
+ <script type="text/javascript" src="admin/ueditor/ueditor.config.js"></script>
+ <!-- 编辑器源码文件 -->
+ <script type="text/javascript" src="admin/ueditor/ueditor.all.js"></script>
+			<script>
+			var num =0;
+			//Demo
+			layui.use(['form','jquery','upload'], function(){
+			  var form = layui.form,$=layui.jquery,upload = layui.upload;
+			  var ue = UE.getEditor('container'),str='';
+		//多图片上传
+		   upload.render({
+		   	 elem: '#test2'//点击元素
+		   	 ,url: '{:url("Goods/upload")}' //改成您自己的上传接口
+		     ,multiple: true//多图选中
+		     ,number:4
+		     ,before: function(obj){
+		      //预读本地文件示例，不支持ie8
+		      obj.preview(function(index, file, result){
+		        $('#demo2').append('<img width="92" height="92" style="margin:0 10px 10px 0" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img img" onclick="delimg(this,'+num+')" id='+num+'>')
+		        num++;
+		      });
+		      
+		    }
+		    ,done: function(res){
+		     	if (res.code==1) {
+		     		str = str!=''?str+"|"+res.msg:res.msg;
+		     		$('#pic').val(str);
+		     	}else{
+		     		layer.msg(res.msg,{icon:2})
+		     	}
+		    }
+		  }); 
+
+		   var i = 1;
+		   	//克隆属性
+		   	$('.clone').click(function(){
+		   		if ($('.key').length>2) {
+		   			layer.msg("属性最多添加三组");
+		   			return false;
+		   		}
+		   		var obj= $('.attr').clone();//div克隆
+		   		obj.attr('class','layui-form-item key');
+		   		obj.attr('id',i);
+		   		obj.find('input').val('');//空
+		   		obj.find('button').attr('class','layui-btn layui-btn-sm layui-btn-danger');//按钮
+		   		obj.find('button>i').html('&#xe640;');//图案
+		   		obj.find('button').attr('onclick',"del("+i+")");//删除具体某个
+		   		$('.attr').after(obj);//追加
+		   		i++;
+		   	})
+
+			  //监听提交
+			  form.on('submit(formDemo)', function(data){
+			  	if (ue.getContentTxt()=='') {
+			  		layer.msg("商品内容不能为空");
+			  		return false;
+			  	}
+			  	var data=JSON.stringify(data.field);
+			   $.post("{:url('Goods/add')}",{'data':data},function(res){
+			   	if (res.code==1) {
+			   		layer.msg(res.msg,{icon:1,time:500},function(){
+			   			window.location.href="{:url('Goods/index')}";
+			   		})
+			   	}else{
+			   		layer.msg(res.msg);
+			   	}
+			   })
+			    return false;
+			  });
+			});
+			//删除图片
+			function delimg(obj,num){
+					// var index=obj.getAttribute('key');//对应下标
+					// if ($('#demo2').children('.img').length==1) {
+					// 	index=0;//获取的对象
+					// }
+					var tstr= $('#pic').val();//定义tstr
+					var arr=tstr.split("|");//JavaScript字符串转数组
+					arr.splice(num, 1);//删除数组对应值(从哪开始,删除几个)
+					var newstr = arr.join("|");//将数组转换字符串
+					$('#pic').val(newstr);//将原有的val给修改
+					// $('#demo2').children('.img').eq(index).remove();//重新查找的对象进行删除
+					$('#'+num).remove();
+					// num=0;
+			}
+			//删除属性
+			function del(i){
+				$("#"+i).remove();
+			}
+			</script>
+			 
+	</div>
+  </div>
+  
+{include file="public/footer" /}

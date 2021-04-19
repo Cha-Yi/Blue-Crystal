@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <base href="__STATIC__/index/">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    <link rel="stylesheet" type="text/css" href="css/regAndLogin.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="css/reg.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/reg.js"></script>
+    <script src="__STATIC__/layui/layui.js"></script>
+</head>
+
+<body>
+    <div class="header">
+        <div class="top_nav">
+            <div class="container">
+                <div class="left">
+                    <div class="pic">
+                        <img src="images/common/header_icon.jpg" alt="">
+                    </div>
+                    <div>你好，欢迎来到新e潮商城！</div>
+                    {eq name="Think.session.user" value=""}
+                    <div class="login"><a href="{:url('User/login')}">登录</a></div>
+                    <div class="register"><a href="{:url('User/reg')}">注册</a></div>
+                    {else/}
+                    <div class="login" style="color: red">欢迎您: {$Think.session.user.user}</div>
+                    <div class="register"><a href="{:url('User/logout')}">注销</a></div>
+                    {/eq}
+                </div>
+                <div class="right">
+                    <ul>
+                        <li><a href="{:url('Vip/index')}">会员中心</a></li>
+                        <li>
+                            <a href="{:url('Order/index')}">我的订单<img src="images/common/down_icon.png" alt=""></a>
+                            <dl>
+                                <dd><a href="{:url('Order/index')}">我的订单</a></dd>
+                              
+                            </dl>
+                        </li>
+                        <li>
+                            <a href="{javascript:void(0)}">网站导航<img src="images/common/down_icon.png" alt=""></a>
+                            <dl>
+                                <dd><a href="http://www.daidu.com">百度</a></dd>
+                                <dd><a href="http://www.taobao.com">淘宝</a></dd>
+                                
+                            </dl>
+                        </li>
+                        <li><a href="{javascript:void(0)}">手机商城</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="top_content">
+            <div class="container">
+                <div class="left">
+                    <div class="logo">
+                        <a href="{:url('Index/index')}"><img src="images/common/logo.jpg" alt=""></a>
+                    </div>
+                </div>
+                <div class="center">
+                    <div class="table">
+                        欢迎注册
+                    </div>
+                </div>
+            </div>
+            <div class="line"></div>
+        </div>
+    </div>
+    <div class="middle">
+        <div class="container clear">
+            <div class="left fl">
+                <ul class="clear top">
+                    <li class="on">手机注册</li>
+                    <li>邮箱注册</li>
+                </ul>
+                <ul class="clear down">
+                <form class="layui-form" action="">
+                    <li class="on">
+                        <div>
+                            <label for="">用户账号：</label><input type="text" name="user" placeholder="请输入账号" lay-verify="required|phone" id="user1">
+                        </div>
+                        <div>
+                            <label for="">设置密码：</label><input type="password" name="pwd" placeholder="请输入密码" lay-verify="required|pass" id="pwd1">
+                        </div>
+                        <div>
+                            <label for="">确认密码：</label><input type="password" name="cpwd" placeholder="请确认密码" lay-verify="required|cpass" id="cpwd1">
+                        </div>
+                        <div>
+                            <label for="">手机号码：</label><input type="text" name="tel" placeholder="请输入手机号码" lay-verify="required|phone" id="tel1">
+                        </div>
+                        <div class="check">
+                            <label for="">短信验证：</label><input type="text" name="code" placeholder="请输入短信验证" lay-verify="required|number" id="code1"><button type="button" id="smscode" onclick="sendsms(this)">获取验证码</button>
+                        </div>
+                        <div class="protocol">
+                            <input type="checkbox"  lay-skin="primary" lay-filter="read">
+                            我已阅读并同意<a href="">《新e潮商城协议》</a>
+                        </div>
+                        <button lay-submit="" lay-filter="demo1" id="btn">立即注册</button>
+                    </li>
+                    </form>
+                    <form class="layui-form" action="" >
+                    <li>
+                        <div>
+                            <label for="">用户邮箱：</label><input type="text" name="user" placeholder="请输入邮箱号" lay-verify="required|email" id="user2">
+                        </div>
+                         <div>
+                            <label for="">设置密码：</label><input type="password" name="pwd" placeholder="请输入密码" lay-verify="required|pass2" id="pwd2">
+                        </div>
+                        <div>
+                            <label for="">确认密码：</label><input type="password" name="cpwd" placeholder="请确认密码" lay-verify="required|cpass2" id="cpwd2">
+                        </div>
+                        <div>
+                            <label for="">手机号码：</label><input type="text" name="tel" placeholder="请输入手机号码" lay-verify="required|phone" id="tel2">
+                        </div>
+                        <div class="check">
+                            <label for="">邮箱验证：</label><input type="text" name="code"  id="code2" placeholder="请输入验证码" lay-verify="required|number"><button  type="button" id="ecode" onclick="sendemali(this)">获取验证码</button>
+                        </div>
+                        <div class="protocol">
+                       
+                                <input type="checkbox" lay-skin="primary" lay-filter="read2">
+                                我已阅读并同意<a href="">《新e潮商城协议》</a>
+                          
+                        </div>
+                        <button lay-submit="" lay-filter="demo2" id="btn2">立即注册</button>
+                    </li>
+                    </form>
+                </ul>
+            </div>
+            <div class="right fl">
+                <p>我已有新e潮商城账号</p>
+                <p>现在就<a href="{:url('User/login')}">立即登录</a></p>
+            </div>
+        </div>
+
+    </div>
+    <div class="footer">
+        <div class="bottom">
+            <div class="container">
+                <ul>
+                    <li>沪ICP备13044278号</li>
+                    <li>合字B1.B2-20130004</li>
+                    <li>营业执照</li>
+                    <li>互联网药品信息服务资格证</li>
+                    <li>互联网药品交易服务资格证</li>
+                </ul>
+                <div class="copyright">
+                    <span>Copyright©  新e潮商城 2007-2016，All Rights Reserved</span>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    layui.use(['carousel', 'form'], function(){
+        var carousel = layui.carousel
+        ,form = layui.form;
+        var num = 0, num2 = 0;
+       
+        //自定义验证规则
+        form.verify({
+            pass: [/^[\S]{5,12}$/,'密码必须5到12位，且不能出现空格'],
+            cpass:function(value){
+                var pwd = $('#pwd1').val();
+                if (pwd!=value) {
+                    return "密码不一致";
+                }
+            },
+            pass2: [/^[\S]{5,12}$/,'密码必须5到12位，且不能出现空格'],
+            cpass2:function(value){
+                var pwd = $('#pwd2').val();
+                if (pwd!=value) {
+                    return "密码不一致";
+                }
+            }
+
+        });
+        
+        //监听协议阅读
+        form.on('checkbox(read)',function(){
+            num = this.checked?1:0;
+        })
+        //监听协议阅读2
+        form.on('checkbox(read2)',function(){
+            num2 = this.checked?1:0;
+        })
+        //手机监听提交
+        form.on('submit(demo1)', function(data){
+            if (num!=1) {
+                layer.msg("请阅读并同意协议");
+                return false;
+            }
+            var val= JSON.stringify(data.field);
+            // ajax
+            $.post("{:url('User/reg')}",{'data':val},function(res){
+                if(res.code==1){
+                    layer.msg('注册成功',{time:500},function(){
+                        window.location.href="{:url('User/login')}";
+                    }); 
+                }else{
+                    layer.msg(res.msg);     
+                }
+            })
+            return false;
+        });
+        //邮箱监听提交
+        form.on('submit(demo2)', function(data){
+            if (num2!=1) {
+                layer.msg("请阅读并同意协议");
+                return false;
+            }
+            var val= JSON.stringify(data.field);
+            // ajax
+            $.post("{:url('User/regemail')}",{'data':val},function(res){
+                if(res.code==1){
+                    layer.msg('注册成功',{time:500},function(){
+                        window.location.href="{:url('User/login')}";
+                    }); 
+                }else{
+                    layer.msg(res.msg);     
+                }
+            })
+            return false;
+        });
+      //回车提交
+      $('#btn').KeyCodeeydown(function(e){
+            if (e.keyCode===13) {
+                $('#btn').click();
+            }
+      })
+      //回车提交
+      $('#btn2').keydown(function(e){
+            if (e.keyCode===13) {
+                $('#btn2').click();
+            }
+      })
+     
+    });
+ 
+    var countdown = 60;
+    //短信
+    function sendsms(){
+        //手机短信  
+        var tel= $('#tel1').val();
+        var reg = /^1[3|4|5|6|7|8|9][0-9]{9}$/;
+        if (tel==''||!reg.test(tel)) {
+            layer.msg("请输入正确手机号");
+            return false;
+        }
+        $.post("{:url('User/sendsms')}",{'tel':tel},function(res){
+            if (res.code==1) {
+                settime();
+            }
+        })
+
+    }
+    //倒计时
+    function settime() {
+        if (countdown == 0) {
+            $('#smscode').attr("disabled",false);
+            $('#smscode').html("免费获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            $('#smscode').attr("disabled", true);
+            $('#smscode').html("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function() {
+            settime() }
+            ,1000)
+       
+    }
+    //邮箱
+    function sendemali(){
+        //邮箱短信  
+        var email= $('#user2').val();
+        var reg = /^[a-z\d]+(\.[a-z\d]+)*@([\da-z](-[\da-z])?)+(\.{1,2}[a-z]+)+$/;
+        if (email==''||!reg.test(email)) {
+            layer.msg("请输入正确邮箱号");
+            return false;
+        }
+        $.post("{:url('User/sendemali')}",{'email':email},function(res){
+            if (res.code==1) {
+                settimeemail();
+            }else{
+                layer.msg(res.msg);
+            }
+        })
+
+    }
+    //倒计时
+    function settimeemail() {
+        if (countdown == 0) {
+            $('#ecode').attr("disabled",false);
+            $('#ecode').html("免费获取验证码");
+            countdown = 60;
+            return;
+        } else {
+            $('#ecode').attr("disabled", true);
+            $('#ecode').html("重新发送(" + countdown + ")");
+            countdown--;
+        }
+        setTimeout(function() {
+            settimeemail() }
+            ,1000)
+       
+    }
+</script>
+</body>
+
+</html>

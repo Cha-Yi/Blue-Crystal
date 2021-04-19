@@ -1,0 +1,58 @@
+{include file="public/header" /}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;" class="layui-form">
+   
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Officialuser/index')}">公众号用户列表</a>
+		 
+		</span>
+		<table class="layui-table">
+		 
+		  <thead>
+		    <tr>
+		      <th>编号</th>
+		      <th>用户头像</th>
+		      <th>用户昵称</th>	      
+		      <th>用户性别</th>
+		      <th>用户住址</th>
+		    </tr> 
+		  </thead>
+		  <tbody>
+			
+		{foreach $list as $vo} 
+		    <tr>
+		      <td>{$vo.id}</td> 
+		  	  <td>
+		  	  	<img src="{$vo.headimgurl}" style="width: 50px; border-radius: 50%; height: 50px">
+		  	  </td>
+		  	  <td>
+		  	  {eq name="vo.nickname" value=""}暂无{else/}{$vo.nickname}{/eq}
+		  	  </td>
+		  	  <td>{$vo.sex}</td>
+		      <td>
+		  	  {$vo.country}{$vo.province}{$vo.city}
+		  	  </td>
+		    </tr>
+		  {/foreach}
+		  </tbody>
+		</table>
+		<!-- 分页 -->
+		<div id="test1" style="text-align: center">
+
+          {$list->render()}
+
+		</div>
+	
+	</div>
+  </div>
+  
+  <script>
+layui.use(['form','jquery'], function(){
+  var form = layui.form
+  ,layer = layui.layer,$=layui.jquery;
+  
+});
+</script>
+{include file="public/footer" /}

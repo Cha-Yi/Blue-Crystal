@@ -1,0 +1,104 @@
+{include file="public/header" /}
+<style type="text/css">
+	.img{cursor: pointer;}
+</style>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Brand/add')}">管理员列表</a>
+		 
+		</span>
+	
+  
+ <form class="layui-form" action="" style="margin-top: 20px;">
+
+  <input type="hidden" name="id" value="{$find.id}">
+  
+  <div class="layui-form-item" >
+      <label class="layui-form-label">角色</label>
+      <div class="layui-input-block">
+        <select name="level" lay-verify="required">
+         <option value=""></option>
+          {volist name="level" id="vo"}
+          <option {eq name="find.level" value="$vo.id"}selected{/eq}  value="{$vo.id}">{$vo.level_name}</option>
+          {/volist}
+        </select>
+      </div>
+  </div>
+
+  <div class="layui-form-item">
+      <label class="layui-form-label">账户</label>
+      <div class="layui-input-block">
+        <input type="text"  required  lay-verify="required" placeholder="请输入管理员账户" autocomplete="off" class="layui-input"  value="{$find.user}" disabled>
+      </div>
+  </div>
+
+   <div class="layui-form-item">
+      <label class="layui-form-label">原密码</label>
+      <div class="layui-input-block">
+        <input type="password" name="oldpwd"   lay-verify="pass" placeholder="请输入原密码" autocomplete="off" class="layui-input">
+      </div>
+  </div>
+
+   <div class="layui-form-item">
+      <label class="layui-form-label">新密码</label>
+      <div class="layui-input-block">
+        <input type="password" name="pwd"   lay-verify="pass|newpass" placeholder="请输入新密码" autocomplete="off" class="layui-input">
+      </div>
+  </div>
+
+  <div class="layui-form-item">
+      <div class="layui-input-block">
+        <button class="layui-btn" lay-submit lay-filter="formDemo" type="button">立即提交</button>
+        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+      </div>
+  </div>
+ </form>
+  <script>
+  	layui.use(['form','jquery'], function(){
+    var form = layui.form;
+    var $ = layui.jquery;
+
+    //自定义验证规则
+    form.verify({
+     pass: function(value){
+      if(value!=''){
+       var reg = /^[\S]{5,12}$/;
+       if(!reg.test(value)){
+        return '密码必须5到12位，且不能出现空格';
+       }
+      }
+     }
+     ,newpass: function(value){
+      if(value!=''){
+       var old = $('input[name="oldpwd"]').val();
+       if(old==value){
+        return '不能与原密码一致';
+       }
+      }
+     }
+    });
+
+     //监听提交
+   form.on('submit(formDemo)', function(data){
+      
+      var data = JSON.stringify(data.field);
+      $.post("{:url('Admin/edit')}",{"data":data},function(res){
+        if(res.code==1){
+         layer.msg(res.msg,{icon:1,time:500},function(){
+          window.location.href="{:url('Admin/index')}";
+         })
+        }else{
+         layer.msg(res.msg);
+        }
+      })
+       return false;
+   });
+  });
+  </script>
+  </div>
+</div>
+{include file="public/footer" /}

@@ -1,0 +1,82 @@
+{include file="public/header" /}
+<style type="text/css">
+	.img{cursor: pointer;}
+</style>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Admin/add')}">管理员列表</a>
+		 
+		</span>
+	
+		
+	<form class="layui-form" action="" style="margin-top: 20px;">
+
+  <div class="layui-form-item">
+	    <label class="layui-form-label">管理角色</label>
+	    <div class="layui-input-block">
+	      <select name="level" lay-verify="required">
+			<option value=""></option>
+			
+		{volist name="level" id="vo"}
+		  	<option value="{$vo.id}">{$vo.level_name}</option>
+		{/volist}
+	       
+	      </select>
+	    </div>
+	  </div>
+
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">账户</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="user" required  lay-verify="required|user" placeholder="请输入管理员账户" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">密码</label>
+	    <div class="layui-input-block">
+	      <input type="password" name="pwd" required  lay-verify="required|pass" placeholder="请输入管理员密码" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="button" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+	</form>
+		<script>
+			layui.use(['form','jquery','upload'], function(){
+			  var form = layui.form,$=layui.jquery;
+		  		
+		  	  //自定义验证规则
+				form.verify({
+					user: [/^[\S]{5,12}$/,'账户必须5到12位，且不能出现空格']
+					,pass: [/^[\S]{5,12}$/,'密码必须5到12位，且不能出现空格']
+					
+				});
+			  //监听提交
+			  form.on('submit(formDemo)', function(data){
+			  	var data=JSON.stringify(data.field);
+			   $.post("{:url('Admin/add')}",{'data':data},function(res){
+			   	if (res.code==1) {
+			   		layer.msg(res.msg,{icon:1,time:500},function(){
+			   			window.location.href="{:url('Admin/index')}";
+			   		})
+			   	}else{
+			   		layer.msg(res.msg);
+			   	}
+			   })
+			    return false;
+			  });
+			});
+			</script> 
+	</div>
+  </div>
+  
+{include file="public/footer" /}

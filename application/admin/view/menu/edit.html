@@ -1,0 +1,126 @@
+{include file="public/header" /}
+<style type="text/css">
+	.img{cursor: pointer;}
+</style>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Menu/edit')}">菜单修改</a>
+		</span>
+		
+	<form class="layui-form" action="" style="margin-top: 20px;">
+	<input type="hidden" name="id" value="{$find.id}">
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">菜单类型</label>
+	    <div class="layui-input-block">
+	      <select name="type" lay-verify="required" lay-filter="selecttext">
+			<option value=""></option>
+		
+		  	<option value="0" {eq name="find.type" value="0"}selected{/eq}>后台</option>
+			<option value="1" {eq name="find.type" value="1"}selected{/eq}>前台</option>
+	        <option value="2" {eq name="find.type" value="2"}selected{/eq}>公众号</option>
+	        <option value="3" {eq name="find.type" value="3"}selected{/eq}>小程序</option>
+	      </select>
+	    </div>
+	  </div>
+	  
+	 <div class="layui-form-item">
+	    <label class="layui-form-label">父级菜单</label>
+	    <div class="layui-input-block">
+	      <select name="pid" lay-verify="required" id="pid">
+	        <option value=""></option>
+	        <option value="0" {eq name="find.pid" value="0"}selected{/eq}>顶级菜单</option>
+	   	{volist name="parent" id="vo"}
+		  	<option value="{$vo.id}" {eq name="find.pid" value="$vo.id"}selected{/eq}>{$vo.menu_name}</option>
+		{/volist}
+	      </select>
+	    </div>
+	  </div>
+
+	   <div class="layui-form-item">
+	    <label class="layui-form-label">菜单名称</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="menu_name" required  lay-verify="required|name" placeholder="请输入菜单名称" autocomplete="off" class="layui-input" value="{$find.menu_name}">
+	    </div>
+	  </div>
+	   <div class="layui-form-item">
+	    <label class="layui-form-label">控制器名</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="class_name" required  lay-verify="required|controller" placeholder="请输入控制器名称" autocomplete="off" class="layui-input" value="{$find.class_name}">
+	    </div>
+	  </div>
+
+	   <div class="layui-form-item">
+	    <label class="layui-form-label">菜单排序</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="sort" required  lay-verify="required|number" placeholder="请输入菜单排序" autocomplete="off" class="layui-input" value="{$find.sort}">
+	    </div>
+	  </div>
+
+
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="button" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+	</form>
+<script type="text/javascript" src="admin/js/jquery.min.js"></script>
+
+			<script>
+			var num =0;
+			//Demo
+			layui.use(['form','jquery','upload'], function(){
+			  var form = layui.form,$=layui.jquery,upload = layui.upload
+			,str='';
+
+		  	 //自定义验证规则
+				form.verify({
+					name:[/^[\S]{2,12}$/,'菜单名称必须2到12位，且不能出现空格']
+					,controller:[/^[a-z_]{2,12}$/,'控制器名必须3到12位英文，且不能出现空格']
+					
+				});
+
+			//监听下拉框
+				form.on('select(selecttext)',function(data){
+					$.post("{:url('Menu/getchild')}",{'type':data.value},function(res){
+						if (res.code==1) {
+							var str = '<option value="">请选择</option>';
+						        str +='<option value="0">顶级菜单</option>';
+						    for (var i = 0; i < res.msg.length; i++) {
+				        			str +='<option value="'+res.msg[i].id+'">'+res.msg[i].menu_name+'</option>';
+				        	}
+				        	$('#pid').empty();//select清空
+				        	$('#pid').append(str);//option追加
+				        	form.render('select');//重新渲染select
+						}
+
+					})	
+				})
+			  //监听提交
+			  form.on('submit(formDemo)', function(data){
+			  
+			  	var data=JSON.stringify(data.field);
+
+			   $.post("{:url('Menu/edit')}",{'data':data},function(res){
+			   	if (res.code==1) {
+			   		layer.msg(res.msg,{icon:1,time:500},function(){
+			   			window.location.href="{$Think.server.http_referer}";
+			   		})
+			   	}else{
+			   		layer.msg(res.msg);
+			   	}
+			   })
+			    return false;
+			  });
+			});
+
+			</script>
+			 
+	</div>
+  </div>
+  
+{include file="public/footer" /}

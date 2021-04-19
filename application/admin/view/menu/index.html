@@ -1,0 +1,82 @@
+{include file="public/header" /}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;"  class="layui-form">
+   <!--  <form method="post" action="{:url('Menu/delall')}">  -->
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Menu/index')}">菜单列表</a>
+		 
+		</span>
+		<div>
+			<a href="{:url('Menu/add')}" class="layui-btn layui-btn-sm"><i class="layui-icon layui-icon-add-1"></i> 添加</a>
+		
+			<button url="{:url('Menu/delall')}" class="layui-btn layui-btn-danger layui-btn-sm" id="delall"><i class="layui-icon layui-icon-delete "></i>选中删除</button>
+		</div>
+		<table class="layui-table">
+		 
+		  <thead>
+		    <tr>
+			   <th>
+			   	  <input type="checkbox" id="checkall" lay-skin="primary" lay-filter="checkall">
+			   </th>
+		      <th>编号</th>
+		      <th>菜单名称</th>
+		      <th>控制器名</th>
+		      <th>菜单类型</th>
+		      <th>父级菜单</th>
+		      <th>菜单排序</th>
+		      <th>操作</th>
+
+		    </tr> 
+		  </thead>
+		  <tbody>
+			
+		{foreach $listarr as $vo} 
+		    <tr>
+		   	  <td>
+		   	  	<input type="checkbox" class="check" value="{$vo.id}" lay-skin="primary" lay-filter="check">
+		      </td>
+		      <td>{$vo.id}</td>
+		      <td>{$vo.menu_name}</td>
+		      <td>{$vo.class_name}</td>
+		      <td>
+				{switch name="vo.type"}
+				    {case value="0"}后台{/case}
+				    {case value="1"}前台{/case}
+				  	{case value="2"}公众号{/case}
+				  	{case value="3"}小程序{/case}
+				{/switch}
+		      </td>
+		      <td>{$vo.pid}</td>
+		      <td>{$vo.sort}</</td>
+			
+		      <td>
+		      	<a href="{:url('Menu/edit',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+		      	<button class="layui-btn layui-btn-danger layui-btn-xs del" iid="{$vo.id}" url="{:url('Menu/del')}"><i class="layui-icon layui-icon-delete "></i>删除</button>
+		      </td>
+		    </tr>
+		  {/foreach}
+		  </tbody>
+		</table>
+		<!-- 分页 -->
+		<div id="test1" style="text-align: center">
+
+          {$list->render()}
+
+			<!-- <div class="layui-box layui-laypage layui-laypage-default" id="layui-laypage-1">
+			<a href="javascript:;" class="layui-laypage-prev layui-disabled" data-page="0">上一页</a>
+			<span class="layui-laypage-curr"><em class="layui-laypage-em"></em><em>1</em>
+				</span>
+				<a href="javascript:;" data-page="2">2</a>
+				<a href="javascript:;" data-page="3">3</a>
+				<a href="javascript:;" data-page="4">4</a>
+				<a href="javascript:;" data-page="5">5</a>
+				<a href="javascript:;" class="layui-laypage-next" data-page="2">下一页</a>
+				</div> -->
+		</div>
+		<!-- </form> -->
+	</div>
+  </div>
+  
+{include file="public/footer" /}

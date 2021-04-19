@@ -1,0 +1,94 @@
+{include file="public/header" /} 
+<style>
+.wxsm{ width:1200px; margin:0 auto; overflow:hidden;}
+.wxsmt{ width:100%; height:40px; border-bottom:1px solid #ccc;}
+.wxsmt h2{ font-size:14px; line-height:40px; color:#232323; font-weight:400; text-align:center;}
+.wxsmc{ width:100%; overflow:hidden;}
+.smcr{ overflow:hidden; margin:0 auto; }
+.smcr h2{ font-size:14px; font-weight:400; line-height:40px; text-align:center;}
+.smcr h2 span{ font-size:20px; color:#f23535;}
+.smcrb{ width:100%; overflow:hidden;;}
+.smm{ width:218px; height:284px; border:1px solid #3cb035; background:#3cb035; margin:0 auto}
+.smm img{ width:218px; height:218px; background:#fff;}
+.smm span{ display:block; color:#fff; line-height:66px; text-align:center;}
+ 
+</style>
+    <div class="wxsm">
+ <div class="wxsmt">
+  <h2>订单提交成功，请尽快付款</h2>
+ </div>
+ <div class="wxsmc">
+  <div class="smcr">
+   <h2>应付金额：<span>{$paymoney}</span>元</h2>
+   <div class="smcrb">
+    <div class="smm">
+     <img src="/qrcode.php?data={$url}"/>
+     <span>打开微信，扫描二维码支付</span>
+    </div>
+   </div>
+  </div>
+ </div>
+</div>
+<script> 
+ //设置每隔1000毫秒执行一次load() 方法 
+ var myIntval=setInterval(function(){loads()},10000); 
+ 
+ function loads(){ 
+  var xmlhttp; 
+    // 轮询的浏览器设置 
+    if (window.XMLHttpRequest){ 
+     // code for IE7+, Firefox, Chrome, Opera, Safari 
+     xmlhttp=new XMLHttpRequest(); 
+    }else{ 
+     // code for IE6, IE5 
+     xmlhttp=new ActiveXObject("Microsoft.XMLHTTP"); 
+    } 
+    xmlhttp.onreadystatechange=function(){ 
+     if (xmlhttp.readyState==4 && xmlhttp.status==200){ 
+      trade_state=JSON.parse(xmlhttp.responseText); 
+      console.log(trade_state);//打印查看轮询的状态，也可以关闭。
+      //判断订单支付状态 并用document.getElementById方法赋值到myDiv中；
+      if(trade_state.code=='SUCCESS'){ 
+        
+       //延迟3000毫秒执行tz() 方法
+       clearInterval(myIntval);
+       //进行跳转。
+        var url = "{:url('Vip/index')}";
+        var http = window.location.protocol;
+        var zhu = window.location.host;
+        setTimeout("location.href='"+http+"//"+zhu+""+url+"'",1500); 
+      }else if(trade_state.code=='REFUND'){ 
+        
+       clearInterval(myIntval); 
+      }else if(trade_state.code=='NOTPAY'){ 
+          
+      }else if(trade_state.code=='CLOSED'){ 
+        
+       clearInterval(myIntval);
+      }else if(trade_state.code=='REVOKED'){ 
+        
+       clearInterval(myIntval);
+      }else if(trade_state.code=='USERPAYING'){ 
+        
+      }else if(trade_state.code=='PAYERROR'){ 
+        
+       clearInterval(myIntval); 
+      } 
+        
+     } 
+    } 
+  //orderquery.php 文件返回订单状态，通过订单状态确定支付状态 
+  xmlhttp.open("POST","{:url('Wxpay/orderquery')}",false); 
+  //下面这句话必须有 
+  //把标签/值对添加到要发送的头文件。 
+  xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded"); 
+  xmlhttp.send("out_trade_no={$out_trade_no}"); 
+    
+ } 
+</script>
+{include file="public/footer" /} 
+
+
+
+ 
+

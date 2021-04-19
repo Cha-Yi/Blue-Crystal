@@ -1,0 +1,155 @@
+{include file="public/header"/}
+    <link rel="stylesheet" type="text/css" href="css/shop_cart.css">
+    <link rel="stylesheet" type="text/css" href="css/address.css">
+
+    <script src="js/address.js"></script>
+
+    <div class="middle">
+        <div class="container">
+            <div class="head">
+                <div class="title fl">
+                    地址页
+                </div>
+                <div class="head-bar fr">
+                    <ul>
+                        <li class="on first">
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>1</span></div>
+                            </div>
+                            <p>我的购物车</p>
+                        </li>
+                        <li class="on ">
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>2</span></div>
+                            </div>
+                            <p>确认订单</p>
+                        </li>
+                        <li class="on active">
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>3</span></div>
+                            </div>
+                            <p>确认地址</p>
+                        </li>
+                        <li class="last">
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>4</span></div>
+                            </div>
+                            <p>提交订单</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <h1>已有地址</h1>
+                <ul class="clear" id="addressList">
+                    {volist name="list" id="vo"}
+                        <li>
+                            <p>姓名：{$vo.a_name}</p>
+                            <p>电话：{$vo.tel}</p>
+                            <p>地址：{$vo.province}{$vo.city}{$vo.area}{$vo.road}</p>
+                            <div>
+                                <a class=" {eq name='vo.curruct' value='1'}choose{/eq} choseBtn" url="{:url('Address/edit',['id'=> $vo.id])}">选择</a><a class="del" url="{:url('Address/del',['id'=>$vo.id])}">删除</a>
+                            </div>
+                        </li>
+                    {/volist}  
+                </ul>
+                <h1>新增地址</h1>
+                <label for="">
+                    <b>*</b>姓名：
+                </label>
+                <input id="name" type="text" lay-verify="required" placeholder="请输入姓名">
+                <b>姓名不能为空</b><br>
+                <label for="">
+                    <b>*</b>电话：
+                </label>
+                <input id="phone" type="tel" lay-verify="required" placeholder="请输入电话">
+                <b>电话不能为空</b><br>
+                <label for="">
+                    <b>*</b>所在地区：
+                </label>
+                <select name="" id="province">
+                    <option>请选择所在省份</option>
+                    {volist name="provinces" id="vo"}
+                    <option value="{$vo.province}" code="{$vo.provinceid}">{$vo.province}</option>
+                    {/volist}
+                </select>
+                <select name="" id="city">
+                    <option>请选择所在城市</option>
+                    
+                </select>
+                <select name="" id="area">
+                    <option>请选择所在区县</option>
+                    
+                </select>
+                <b>省市不能为空</b><br>
+                <label for="detailAddress">
+                    <b>*</b>详细地址：
+                </label>
+                <input id="detailAddress" type="text" lay-verify="required" placeholder="请输入详细地址">
+                <b>详细地址不能为空</b>
+                <div class="defaultAddress">
+                    <label >
+                        <input id="defaultAddress" type="checkbox" value="0">
+                        <span>设为默认地址</span>
+                    </label>
+                </div>
+                <a class="btn" id="saveAddress" lay-submit lay-filter="formDemo" url="{:url('Address/add')}">保存收货地址</a>
+                <div class="submit">
+                    <a id="confirmBtn" url="{:url('Order/confrim')}">确认地址</a>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+    layui.use(['layer'], function(){
+        //获取city
+        $('#province').change(function(){
+            var code = $('#province').find('option:selected').attr('code');
+            $.post("{:url('Address/getcity')}",{'provinceid':code},function(res){
+                if (res.code == 1) {
+                    
+                    $('#city').empty();//清除
+                    $('#area').empty();
+                    $('#area').append("<option>请选择所在区县</option>");
+                    var str = '<option>请选择所在城市</option>';
+                    for (var i = 0; i < res.info.length; i++) {
+                        str += "<option value="+res.info[i].city+" code="+res.info[i].cityid+">"+res.info[i].city+"</option>";
+                    }
+                    $('#city').append(str);
+                }else{
+                    $('#city').empty();//清除
+                    $('#area').empty();
+                    $('#city').append("<option>请选择所在城市</option>");
+                    $('#area').append("<option>请选择所在区县</option>");
+                }
+
+            })
+        })
+        //获取area下拉框状态改变触发change
+        $('#city').change(function(){
+            var code = $('#city').find('option:selected').attr('code');
+            $.post("{:url('Address/getcity')}",{'cityid':code},function(res){
+                if (res.code == 1) {
+                    
+                    $('#area').empty();
+                    var str = '<option>请选择所在区县</option>';
+                    for (var i = 0; i < res.info.length; i++) {
+                        str += "<option value="+res.info[i].area+" code="+res.info[i].cityid+">"+res.info[i].area+"</option>";
+                    }
+                    $('#area').append(str);
+                }else{
+                    $('#city').empty();//清除
+                    $('#area').empty();
+                    $('#city').append("<option>请选择所在城市</option>");
+                    $('#area').append("<option>请选择所在区县</option>");
+                }
+
+            })
+        })
+    })
+</script>
+   {include file="public/footer"/}

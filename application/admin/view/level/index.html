@@ -1,0 +1,79 @@
+{include file="public/header" /}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;" class="layui-form">
+   
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Level/index')}">角色列表</a>
+		 
+		</span>
+		<div>
+			<a href="{:url('Level/add')}" class="layui-btn layui-btn-sm"><i class="layui-icon layui-icon-add-1"></i> 添加</a>
+		
+			<button url="{:url('Level/delall')}" class="layui-btn layui-btn-danger layui-btn-sm" id="delall"><i class="layui-icon layui-icon-delete "></i>选中删除</button>
+		</div>
+		<table class="layui-table">
+		 
+		  <thead>
+		    <tr>
+			   <th>
+			   		<input type="checkbox" id="checkall" lay-skin="primary" lay-filter="checkall">
+			   </th>
+		      <th>角色编号</th>
+		      <th>角色名称</th>
+		      <th>角色权限</th>
+
+		      <th>操作</th>
+
+		    </tr> 
+		  </thead>
+		  <tbody>
+			
+		{foreach $listarr as $vo} 
+		    <tr>
+		   	  <td>
+		   	  	<input type="checkbox" class="check" value="{$vo.id}" lay-skin="primary" lay-filter="check">
+		      </td>
+		      <td>{$vo.id}</td>
+		      <td>{$vo.level_name}</td>
+		  	  <td width="600">{$vo.menu_level}</td>
+		      <td>
+		      	<a {eq name="$vo.id" value="1"}href="JavaScript:void(0)"{else/}href="{:url('Level/edit',['id'=>$vo.id])}"{/eq} class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+		      	<button class="layui-btn layui-btn-danger layui-btn-xs del" iid="{$vo.id}" url="{:url('Level/del')}" {eq name="vo.id" value="1"}disabled{/eq}><i class="layui-icon layui-icon-delete "></i>删除</button>
+		      </td>
+		    </tr>
+		  {/foreach}
+		  </tbody>
+		</table>
+		<!-- 分页 -->
+		<div id="test1" style="text-align: center">
+
+          {$list->render()}
+
+		</div>
+	
+	</div>
+  </div>
+  
+  <script>
+layui.use(['form','jquery'], function(){
+  var form = layui.form
+  ,layer = layui.layer,$=layui.jquery;
+  
+  //监听指定开关
+  form.on('switch(switchTest)', function(data){
+     var check=this.checked?1:0;
+     var id = data.elem.value;//当前的id,从data中拿
+     if (id !=1) {
+     	$.post("{:url('Level/recommend')}",{'id':id,'allow':check},function(res){
+     		layer.msg(res.msg)
+     	})
+     }else{
+     	layer.msg('!!!违规操作',{icon:5})
+     }
+     
+  });
+});
+</script>
+{include file="public/footer" /}

@@ -1,0 +1,472 @@
+{include file="public/header"/}
+    <link rel="stylesheet" type="text/css" href="css/pro_details.css">
+
+    <script src="js/pro_details.js"></script>
+
+    <div class="middle">
+        <div class="container">
+            <div class="sub-nav">
+                <dl>
+                    <dt><a href="{:url('Index/index')}">首页</a></dt>
+                    <!-- <dd><a href="{:url('Goods/index',['nid'=>$find.nid])}">{$find.nid}</a></dd> -->
+                    <dd><a href="{:url('Goods/info',['id'=>$find.id])}">{$find.name}</a></dd>
+                </dl>
+            </div>
+            <div class="shop-detail clear">
+            <input type="hidden" id="count" value="{$find.count}"><!-- 用在num.js -->
+                <div class="left fl">
+                    <div class="left fl ">
+                        <div class="pic">
+                            <img src="{$find.pic.0}" alt="" width="418" height="418">
+                        </div>
+                        <div class="sm-pic">
+                            <ul class="clear">
+                            {volist name="$find.pic" id="vo"}
+                                <li {eq name="$i" value="1"}class="on"{/eq}><img src="{$vo}" alt="" width="68" height="68"></li>
+                            {/volist}
+                            </ul>
+                        </div>
+                        <div class="txt">
+                            <div style="float: left;">
+                          
+                            <div class="bshare-custom"><div class="bsPromo bsPromo2"></div><a title="分享到QQ空间" class="bshare-qzone"></a><a title="分享到新浪微博" class="bshare-sinaminiblog"></a><a title="分享到QQ好友" class="bshare-qqim" href="javascript:void(0);"></a><a title="分享到微信" class="bshare-weixin" href="javascript:void(0);"></a><a title="分享到腾讯微博" class="bshare-qqmb"></a><a title="分享到网易微博" class="bshare-neteasemb"></a><a title="更多平台" class="bshare-more bshare-more-icon more-style-addthis"></a><span class="BSHARE_COUNT bshare-share-count" style="float: none;">0</span></div><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#style=-1&amp;uuid=&amp;pophcol=2&amp;lang=zh"></script><script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/bshareC0.js"></script>
+                           
+                            </div>
+                            {eq name="type" value="0"}
+                            <span class="collect" style="float: right; cursor: pointer;" type="0">收藏宝贝（{$count}人气）</span>
+                            {else/}
+                            <span class="collect" style="float: right; cursor: pointer; background-image: url(images/pro_details/icon5.jpg);" type="1">已收藏（{$count}人气）</span>
+                            {/eq}
+                        </div>
+                    </div>
+                    <div class="right fl">
+                        <form >
+                            <h2 id="proName">{$find.name}</h2>
+                            
+                            <p>正品原装供货直售，天天向上系列珍珠项链，防过敏放心佩戴。</p>
+                            <div class="price">
+                                <div class="up clear">
+                                    <span class="fl">原价：<b>￥{$find.price*1.5}</b></span><span class="fr">库存：<b>{$find.count}</b></span>
+                                </div>
+                                <div class="down clear">
+                                    <span class="fl">促销价：<b id="price">￥{$find.price}</b></span><span class="fr">交易成功：<b>{$find.sales}</b></span>
+                                </div>
+                            </div>
+                        {volist name="attr" id="vo" key="k"}
+                            <div class="check clear">
+                                <span>{$vo.name}</span>
+                                {volist name="vo['val']" id="sub" key="ko"}
+                                <label>
+                                    <input class="checkinput" type="radio" name="color{$k}" value="{$sub}" {eq name="$ko" value="1" }checked{/eq}>
+                                    <span {eq name="$ko" value="1" }class="on"{/eq}>{$sub}</span>
+                                </label>
+                                {/volist}
+                            </div>
+                        {/volist}
+                            <div class="num-box" id="num" >
+                                <span>数量：</span>
+                                <span class="num clear">
+                                    <span class="numSub">-</span>
+                                    <input type="text" name="" class="numValue" value="1">
+                                    <span class="numAdd">+</span>
+                                </span>
+                                <span>库存：1314件</span>
+                            </div>
+                            <div>
+                                <button type="button" class="buy">立即购买</button>
+                                <button type="button"  class="car"><img src="images/pro_details/car.jpg" alt=""><span>加入购物车</span></button>
+                            </div>
+                            <div class="promise">
+                                <span>官方承诺：</span><span><img src="images/pro_details/icon4.png" alt=""><span>正品保证</span></span><span><img src="images/pro_details/icon4.jpg" alt="">七天无理由退换货</span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="right fl">
+                    <dl>
+                        <dt>热销产品</dt>
+                        {volist name="salesarr" id="vo"}
+                        <dd>
+                            <a href="{:url('Goods/info',['id'=>$vo.id])}">
+                                <img src="{$vo.pic}" alt="" width="148" height="121">
+                            </a>
+                            <p><a href="{:url('Goods/info',['id'=>$vo.id])}">￥{$vo.price*1.5}</a></p>
+                        </dd>
+                       {/volist}
+                    </dl>
+                </div>
+            </div>
+            <div class="shop-content clear">
+                <div class="left fl">
+                    <dl>
+                        <dt>销量排行榜</dt>
+                        {volist name="guessarr" id="vo"}
+                        <dd class="clear">
+                            <div class="clear">
+                                <div class="pic fl">
+                                <a href="{:url('Goods/info',['id'=>$vo.id])}"><img src="{$vo.pic}" alt="" width="69" height="113"></a>
+                                </div>
+                                <div class="text">
+                                <h2><a href="{:url('Goods/info',['id'=>$vo.id])}">{$vo.name}</a></h2>
+                                    <h3>￥{$vo.price*1.5}</h3>
+                                    <p>已售出:<b>{$vo.sales}</b>件</p>
+                                </div>
+                            </div>
+                            <div class="down"></div>
+                        </dd>
+                        {/volist}
+                    </dl>
+                </div>
+                <div class="right fl">
+                    <div class="top-nav tabs-nav">
+                        <ul class="clear">
+                            <li class="on">商品详情</li>
+                            <li>累计评论（<b>520</b>）</li>
+                            <li>售后服务</li>
+                            <li>规则与声明</li>
+                        </ul>
+                    </div>
+                    <div class="tabs-data on">
+                        {$find.into}
+                        <div class="comment">
+                            <div class="title">
+                                <ul class="clear">
+                                    <li class="on">全部评论（100</li>
+                                    <li>好评（99</li>
+                                    <li>中评（1）</li>
+                                    <li>差评（0）</li>
+                                    <li>追评（0）</li>
+                                </ul>
+                            </div>
+                            <div class="content sub-tabs">
+                                <div class="sub-tab">
+                                    <ul>
+                                        <li class="comment-item">
+                                            <div class="person-info">
+                                                <img src="images/pro_details/photo.jpg" alt="">
+                                                <h3>136*****99</h3>
+                                            </div>
+                                            <ul class="addition">
+                                                <li>颜色：白色</li>
+                                                <li>尺寸：40cm</li>
+                                            </ul>
+                                            <div class="star">       
+                                                <div class="star_5">
+                                                </div>
+                                            </div>
+                                            <p class="comment-text">正品好货，质量很好，不错啊</p>
+                                            <span class="date">2016-4-3 15:20:19</span>
+                                            <div class="comment-btn on-reply">
+                                                <button type="button" class="on">回复<i>1</i></button>
+                                                <button type="button">点赞<i>0</i></button>
+                                            </div>
+                                            <div class="comment-content">
+                                                <h4>136*****33回复136*****99：</h4>
+                                                <p>你确定？？？？？</p>
+                                                <span>2016-4-3 15:20:19</span>
+                                            </div>
+                                            <form action="">
+                                                <textarea rows="4" cols="" placeholder="回复：136*****99"></textarea>
+                                                <input type="button" name="" value="提交">
+                                                <span class="fr">您还可以输入400字</span>
+                                            </form>
+                                        </li>
+                                        <li class="comment-item">
+                                            <div class="person-info">
+                                                <img src="images/pro_details/photo.jpg" alt="">
+                                                <h3>136*****99</h3>
+                                            </div>
+                                            <ul class="addition">
+                                                <li>颜色：白色</li>
+                                                <li>尺寸：40cm</li>
+                                            </ul>
+                                            <div class="star">       
+                                                <div class="star_5">
+                                                </div>
+                                            </div>
+                                            <p class="comment-text">正品好货，质量很好，不错啊</p>
+                                            <span class="date">2016-4-3 15:20:19</span>
+                                            <div class="comment-btn">
+                                                <button type="button">回复<i>0</i></button>
+                                                <button type="button">点赞<i>0</i></button>
+                                            </div>
+                                            <div class="comment-content">
+                                            </div>
+                                            <form action="">
+                                                <textarea rows="4" cols="" placeholder="回复：136*****99"></textarea>
+                                                <input type="button" name="" value="提交">
+                                                <span class="fr">您还可以输入400字</span>
+                                            </form>
+                                        </li>
+                                        <li class="comment-item">
+                                            <div class="person-info">
+                                                <img src="images/pro_details/photo.jpg" alt="">
+                                                <h3>136*****99</h3>
+                                            </div>
+                                            <ul class="addition">
+                                                <li>颜色：白色</li>
+                                                <li>尺寸：40cm</li>
+                                            </ul>
+                                            <div class="star">       
+                                                <div class="star_2">
+                                                </div>
+                                            </div>
+                                            <p class="comment-text">质量不好，太坑了。。。。。。。。。。。。。</p>
+                                            <span class="date">2016-4-3 15:20:19</span>
+                                            <div class="comment-btn">
+                                                <button type="button">回复<i>0</i></button>
+                                                <button type="button">点赞<i>0</i></button>
+                                            </div>
+                                            <div class="comment-content">
+                                            </div>
+                                            <form action="">
+                                                <textarea rows="4" cols="" placeholder="回复：136*****99"></textarea>
+                                                <input type="button" name="" value="提交">
+                                                <span class="fr">您还可以输入400字</span>
+                                            </form>
+                                        </li>
+                                        <li class="comment-item">
+                                            <div class="person-info">
+                                                <img src="images/pro_details/photo.jpg" alt="">
+                                                <h3>136*****99</h3>
+                                            </div>
+                                            <ul class="addition">
+                                                <li>颜色：白色</li>
+                                                <li>尺寸：40cm</li>
+                                            </ul>
+                                            <div class="star">       
+                                                <div class="star_5">
+                                                </div>
+                                            </div>
+                                            <p class="comment-text">正品好货，质量很好，不错啊</p>
+                                            <span class="date">2016-4-3 15:20:19</span>
+                                            <div class="comment-btn">
+                                                <button type="button">回复<i>0</i></button>
+                                                <button type="button">点赞<i>0</i></button>
+                                            </div>
+                                            <div class="comment-content">
+                                            </div>
+                                            <form action="">
+                                                <textarea rows="4" cols="" placeholder="回复：136*****99"></textarea>
+                                                <input type="button" name="" value="提交">
+                                                <span class="fr">您还可以输入400字</span>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                    <div class="paging">
+                                        <span><a href="#">上一页</a><a href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a class="on" href="#">5</a>...<a href="#">10</a><a href="#">下一页</a><span>共<b>10</b>页，到第</span><input type="text"><span>页</span><a class="button" href="#">确定</a></span>
+                                    </div>
+                                </div>
+                                <div class="sub-tab">
+                                    <ul>
+                                        <li class="comment-item">
+                                            <div class="person-info">
+                                                <img src="images/pro_details/photo.jpg" alt="">
+                                                <h3>136*****99</h3>
+                                            </div>
+                                            <ul class="addition">
+                                                <li>颜色：白色</li>
+                                                <li>尺寸：40cm</li>
+                                            </ul>
+                                            <div class="star">       
+                                                <div class="star_5">
+                                                </div>
+                                            </div>
+                                            <p class="comment-text">正品好货，质量很好，不错啊</p>
+                                            <span class="date">2016-4-3 15:20:19</span>
+                                            <div class="comment-btn">
+                                                <button type="button">回复<i>0</i></button>
+                                                <button type="button">点赞<i>0</i></button>
+                                            </div>
+                                            <div class="comment-content">
+                                            </div>
+                                            <form action="">
+                                                <textarea rows="4" cols="" placeholder="回复：136*****99"></textarea>
+                                                <input type="button" name="" value="提交">
+                                                <span class="fr">您还可以输入400字</span>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                    <div class="paging">
+                                        <span><a href="#">上一页</a><a href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a class="on" href="#">5</a>...<a href="#">10</a><a href="#">下一页</a><span>共<b>10</b>页，到第</span><input type="text"><span>页</span><a class="button" href="#">确定</a></span>
+                                    </div>
+                                </div>
+                                <div class="sub-tab">
+                                    <ul>
+                                        <li class="comment-item">
+                                            <div class="person-info">
+                                                <img src="images/pro_details/photo.jpg" alt="">
+                                                <h3>136*****99</h3>
+                                            </div>
+                                            <ul class="addition">
+                                                <li>颜色：白色</li>
+                                                <li>尺寸：40cm</li>
+                                            </ul>
+                                            <div class="star">       
+                                                <div class="star_5">
+                                                </div>
+                                            </div>
+                                            <p class="comment-text">正品好货，质量很好，不错啊</p>
+                                            <span class="date">2016-4-3 15:20:19</span>
+                                            <div class="comment-btn">
+                                                <button type="button">回复<i>0</i></button>
+                                                <button type="button">点赞<i>0</i></button>
+                                            </div>
+                                            <div class="comment-content">
+                                            </div>
+                                            <form action="">
+                                                <textarea rows="4" cols="" placeholder="回复：136*****99"></textarea>
+                                                <input type="button" name="" value="提交">
+                                                <span class="fr">您还可以输入400字</span>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                    <div class="paging">
+                                        <span><a href="#">上一页</a><a href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a class="on" href="#">5</a>...<a href="#">10</a><a href="#">下一页</a><span>共<b>10</b>页，到第</span><input type="text"><span>页</span><a class="button" href="#">确定</a></span>
+                                    </div>
+                                </div>
+                                <div class="sub-tab">
+                                    <ul>
+                                        <li class="comment-item">
+                                            <div class="person-info">
+                                                <img src="images/pro_details/photo.jpg" alt="">
+                                                <h3>136*****99</h3>
+                                            </div>
+                                            <ul class="addition">
+                                                <li>颜色：白色</li>
+                                                <li>尺寸：40cm</li>
+                                            </ul>
+                                            <div class="star">       
+                                                <div class="star_2">
+                                                </div>
+                                            </div>
+                                            <p class="comment-text">质量不好，太坑了。。。。。。。。。。。。。</p>
+                                            <span class="date">2016-4-3 15:20:19</span>
+                                            <div class="comment-btn">
+                                                <button type="button">回复<i>0</i></button>
+                                                <button type="button">点赞<i>0</i></button>
+                                            </div>
+                                            <div class="comment-content">
+                                            </div>
+                                            <form action="">
+                                                <textarea rows="4" cols="" placeholder="回复：136*****99"></textarea>
+                                                <input type="button" name="" value="提交">
+                                                <span class="fr">您还可以输入400字</span>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                    <div class="paging">
+                                        <span><a href="#">上一页</a><a href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a class="on" href="#">5</a>...<a href="#">10</a><a href="#">下一页</a><span>共<b>10</b>页，到第</span><input type="text"><span>页</span><a class="button" href="#">确定</a></span>
+                                    </div>
+                                </div>
+                                <div class="sub-tab">
+                                    <ul>
+                                    </ul>
+                                    <div class="paging">
+                                        <span><a href="#">上一页</a><a href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a class="on" href="#">5</a>...<a href="#">10</a><a href="#">下一页</a><span>共<b>10</b>页，到第</span><input type="text"><span>页</span><a class="button" href="#">确定</a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="tabs-data">
+                        
+                    </div>
+                    <div class="tabs-data">
+                        
+                    </div>
+                    <div class="tabs-data">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+<script type="text/javascript">
+    layui.use(['jquery','layer'], function(){
+        var layer= layui.layer;
+        $('.collect').click(function(){
+            var type = $(this).attr('type');
+            $.post("{:url('Goods/collect')}",{'gid':"{$find.id}",'type':type},function(res){
+                if (res.code==1) {
+                    layer.msg("操作成功");
+                    if (res.msg==1) {
+                        $('.collect').css('background-image','url(images/pro_details/icon5.jpg)');
+                        $('.collect').html('<font style="color:orange;">已收藏（{$count}人气）</font>');
+                        $('.collect').attr('type',1);
+                    }else{
+                        $('.collect').css('background-image','url(images/pro_details/icon2.jpg)');
+                        $('.collect').html('<font style="color:#ccc;">收藏宝贝（{$count}人气）</font>');
+                        $('.collect').attr('type',0);
+                    }
+                }else{
+                    layer.msg(res.msg);
+                }
+
+            })
+        })
+        //加入购物车
+        $('.car').click(function(){
+            var gid = "{$find.id}",num = Number($('.numValue').val()),count = Number("{$find.count}");
+
+
+            var aid = '',that= $(this);
+            $('.checkinput').each(function(index){
+                if ($('.checkinput').eq(index).attr('checked')) {
+                    aid += $('.checkinput').eq(index).val()+'|' ;
+                }
+            })
+
+            if(count<num){
+                layer.msg('库存不足');
+            }else{
+                    $.post("{:url('Cart/add')}",{'gid':gid,'num':num,'aid':aid,'count':count},function(res){
+                if (res.code==1) {
+                    // 获取商品数量
+                    var count = parseInt( $( ".numValue" ).val() );
+                    // 按钮效果
+                    var span = $( "<span> +" + count + "</span>" );
+                    span.css( { "position": "absolute", "left": "50%", "margin-left": "-11.5px" } );
+                    that.append( span );
+                    span.animate( 
+                        { 
+                            "margin-top": "-100px", "opacity": 0 }, 
+                            "slow", 
+                            function () {
+                            span.remove();
+                        } );
+                }
+                layer.msg(res.msg);
+            })
+            }
+        })
+        //立即购买
+        $('.buy').click(function(){
+            var gid = "{$find.id}",num = Number($('.numValue').val()),count = Number("{$find.count}");
+            var aid = '',that= $(this);
+            //属性 
+            $('.checkinput').each(function(index){
+                if ($('.checkinput').eq(index).attr('checked')) {
+                    aid += $('.checkinput').eq(index).val()+'|' ;
+                }
+            })
+
+            if(count<num){
+                layer.msg('库存不足');
+                return;
+            }else{
+                $.post("{:url('Cart/nowbuy')}",{'gid':gid,'num':num,'aid':aid,'count':count},function(res){
+                    if (res.code==1) {
+                       window.location.href="{:url('Address/index')}";//跳转选地址
+                       return;
+                    }
+                    layer.msg(res.msg);
+                })
+            }
+        })
+    })
+</script>
+<script src="js/num.js"></script>
+{include file="public/footer"/}

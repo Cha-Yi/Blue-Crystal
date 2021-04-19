@@ -1,0 +1,46 @@
+<div class="footer">
+        <div class="top">
+            <div class="container">
+                <ul>
+                    <li><img src="images/common/icon1.png" alt=""><span>类型多样，轻松购物</span></li>
+                    <li><img src="images/common/icon2.png" alt=""><span>极速物流，快速送达</span></li>
+                    <li><img src="images/common/icon3.png" alt=""><span>正品行货，精致服务</span></li>
+                    <li><img src="images/common/icon4.png" alt=""><span>天天优惠，购物无忧</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container">
+                <ul>
+                {volist name="newscate" id="vo"}
+                    <li>
+                        <h3><a href="{:url('Index/index')}">{$vo.name}</a></h3>
+                        <dl>
+                        {volist name="$vo['child']" id="sub"}
+                            <dd><a href="{:url('Index/index')}">{$sub.title}</a></dd>
+                        {/volist}   
+                        </dl>
+                    </li>
+                {/volist}   
+                </ul>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="container">
+                <div class="flag"></div>
+                <ul>
+                    <li>沪ICP备13044278号</li>
+                    <li>合字B1.B2-20130004</li>
+                    <li>营业执照</li>
+                    <li>互联网药品信息服务资格证</li>
+                    <li>互联网药品交易服务资格证</li>
+                </ul>
+                <div class="copyright">
+                    <span>Copyright©  新e潮商城 2007-2016，All Rights Reserved</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+{include file="public/header" /}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;" class="layui-form">
+   
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('People/index')}">适用人群分类列表</a>
+		 
+		</span>
+		<div>
+			<a href="{:url('People/add')}" class="layui-btn layui-btn-sm"><i class="layui-icon layui-icon-add-1"></i> 添加</a>
+		
+			<button url="{:url('People/delall')}" class="layui-btn layui-btn-danger layui-btn-sm" id="delall"><i class="layui-icon layui-icon-delete "></i>选中删除</button>
+		</div>
+		<table class="layui-table">
+		 
+		  <thead>
+		    <tr>
+			   <th>
+			   		<input type="checkbox" id="checkall" lay-skin="primary" lay-filter="checkall">
+			   </th>
+		      <th>编号</th>
+		  
+		      <th>适用人群名称</th>
+		     
+		      <th>操作</th>
+
+		    </tr> 
+		  </thead>
+		  <tbody>
+			
+		{foreach $list as $vo} 
+		    <tr>
+		   	  <td>
+		   	  	<input type="checkbox" class="check" value="{$vo.id}" lay-skin="primary" lay-filter="check">
+		      </td>
+		      <td>{$vo.id}</td>
+		      <td>{$vo.name}</td>
+	
+		      <td>
+		      	<a href="{:url('People/edit',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+		      	<button class="layui-btn layui-btn-danger layui-btn-xs del" iid="{$vo.id}" url="{:url('People/del')}"><i class="layui-icon layui-icon-delete "></i>删除</button>
+		      </td>
+		    </tr>
+		  {/foreach}
+		  </tbody>
+		</table>
+		<!-- 分页 -->
+		<div id="test1" style="text-align: center">
+
+          {$list->render()}
+
+		</div>
+	
+	</div>
+  </div>
+  
+
+{include file="public/footer" /}

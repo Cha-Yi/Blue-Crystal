@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" id="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="format-detection" content="telephone=no" />
+		<base href="__STATIC__/wechat/">
+		<link rel="stylesheet" href="css/reset.css" type="text/css"/>
+		<link href="css/my-indent.css" rel="stylesheet" type="text/css">
+<script src="https://res2.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    wx.config({$json});
+
+</script>
+		<title></title>
+	</head>
+	<body>
+		<div class="zjzz-buylist-wear">
+			
+			<div class="zjzz-buylist-top">
+				<a href="personal-center.html" class="zjzz-buylist-t1"></a>
+				<span class="zjzz-buylist-t2">我的订单</span>
+				<span class="zjzz-buylist-t3">
+					<span class="zjzz-buylist-t4"></span>
+				</span>
+			</div>
+			<div class="zjzz-buylist-top2">			
+				<a href="my-indent-all.html" class="zjzz-buylist-tp1">
+					<i>全部</i>
+				</a>
+				<a href="{:url('Pay/index')}" class="zjzz-buylist-tp1">
+					<i class="zjzz-buylist-tp2">待付款</i>
+					<span class="zjzz-buylist-tp3">1</span>
+				</a>
+				<a href="my-indent-dfh.html" class="zjzz-buylist-tp1">
+					<i>待发货</i>
+					<span class="zjzz-buylist-tp3">1</span>
+				</a>
+				<a href="my-indent-dsh.html" class="zjzz-buylist-tp1">
+					<i>待收货</i>
+					<span class="zjzz-buylist-tp3">1</span>
+				</a>
+				<a href="my-indent-pj.html" class="zjzz-buylist-tp1">
+					<i>评价</i>
+					<span class="zjzz-buylist-tp3">4</span>
+				</a>
+			</div>		
+			<div class="zjzz-buylist-mid">
+				<!--全部-->
+				<div class="zjzz-buylist-m1">
+					<span class="zjzz-buylist-allact">
+						双十一期间发货时效公告>>
+					</span>
+					<div class="zjzz-buylist-goods1">
+						<div class="zjzz-buylist-gtime">
+							<span class="zjzz-buylist-gtime1">2017-11-11</span>
+							<span class="zjzz-buylist-gtime2">待付款</span>
+						</div>
+						<div class="zjzz-buylist-det">
+							<img src="del/2017-11-21_162114.png"/>
+							<div class="zjzz-buylist-gdetail">
+								<span class="zjzz-buylist-gtit1">Dr.Ci:Labo 城野医生 卓效收敛化妆水 限量版 200毫升</span>
+								<span class="zjzz-buylist-gmoney">
+									<i class="zjzz-buylist-gm1">￥179.00</i>
+									<i class="zjzz-buylist-gm2">x1</i>
+								</span>
+							</div>
+						</div>
+						<span class="zjzz-buylist-goodsm">
+							<i class="zjzz-buylist-gm3">共1件</i>
+							<i>应付总额：<i class="zjzz-buylist-gm4">￥179.00</i></i>
+						</span>
+						<div class="zjzz-buylist-btn">
+							<a class="zjzz-buylist-btn3">去付款</a>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script>
+	$(function(){
+		$('.zjzz-buylist-btn3').click(function(e){
+			$.post("{:url('Wxpay/pay')}",{'order_num':2020082556485649,'sumtotal':23,},function(res){
+				console.log(res)
+				wx.chooseWXPay({
+					timestamp: res.timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+					nonceStr: res.nonce_str, // 支付签名随机串，不长于 32 位
+					package: res.prepay_id, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+					signType: 'SHA1', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+					paySign: res.sign, // 支付签名
+					success: function (e) {
+					// 支付成功后的回调函数
+					alert(session);
+					}
+				});
+			})
+		})
+	})
+</script>
+	</body>
+</html>

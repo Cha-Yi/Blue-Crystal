@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" id="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="format-detection" content="telephone=no"/>
+<base href="__STATIC__/wechat/">
+<link href="css/reset.css" rel="stylesheet" type="text/css">
+<link href="css/index.css" rel="stylesheet" type="text/css">
+<script src="https://res2.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    wx.config({$json});
+</script>
+</head>
+<body>
+<div class="near-box">
+      <!--头部开始-->
+	  <div class="yx-index-top">
+	  	 <div class="index-top-box1 location">
+	  	 	<span class="index-top-img1"><img src="images/scan.png" alt=""></span>
+	  	 	<span class="index-top-text1">地址</span>
+	  	 </div>
+	  	 <div class="index-top-box2">
+	  	 	 <span class="fresh-toptext1">北京石景山</span>
+	  	 	 <span class="fresh-topimg1"></span>
+	  	 </div>
+	  	 <a href="search.html" class="index-top-box1">
+	  	 	<span class="index-top-img1"><img src="images/search3.png" alt=""></span>
+	  	 	<span class="index-top-text1">搜索</span>
+	  	 </a>
+	  </div>
+	  <!--头部结束-->
+      <div class="index-bigbox">
+		  <!--轮播开始-->
+		  <div id="slideBox" class="slideBox">
+			<div class="bd" id="bd">
+				<ul>
+				{volist name="bannerlist" id="vo"}
+					<li>
+						<a class="pic" href="javascript:void(0)"><img src="{$vo.pic}"/></a>
+					</li>
+				{/volist}	
+				</ul>
+			</div>
+			<div class="hd">
+				<ul></ul>
+			</div>
+		  </div>
+		  <!--轮播开始-->
+		  <!--分类导航开始-->
+          <div class="classify-menu">
+          	  {volist name="nav" id="vo"}
+          	  <a href="{:url('Good/index',['nid'=>$vo.id])}" class="classify-menu-box1">
+          	  	 <span class="classify-menu-img1 img-color{$i}"><img src="images/0{$i}.png" alt=""></span>
+          	  	 <span class="classify-menu-text1">{$vo.menu_name}</span>
+          	  </a>
+          	  {/volist}
+          </div>
+		  <!--分类导航结束-->
+		  <!--品牌特卖开始-->
+		  <div class="brand-box1">
+		  	  <span class="brand-text1">品牌特卖</span>
+		  	  <span class="brand-img1"></span>
+		  </div>
+		  <div class="special-sale-box1">
+			{volist name="brand" id="vo"}
+		  	 <span class="special-sale-box2"><img src="del/special-sale-img{$i}.jpg" alt=""></span>
+			{/volist}
+		  	 
+		  </div>
+		  <!--品牌特卖结束-->
+		  <!--优选水果开始-->
+		  {volist name="floor" id="vo"}
+		  <div class="brand-box1">
+		  	  <span class="brand-text1">优选水果</span>
+		  	  <span class="brand-img1"></span>
+		  </div>
+		  <div class="special-sale-banner">
+		  	 <img src="{$vo.nav.0.pic.0}" alt="">
+		  </div>
+		 
+		  <div class="special-sale-box3">
+		   {volist name="vo['child']" id="sub"}
+		  	 <div class="special-sale-box4">
+		  	 	 <span class="special-sale-img1"><img src="{$sub.pic}" alt=""></span>
+		  	 	 <span class="special-sale-tbox">{$sub.name|mb_substr=0,10,'utf-8'}...</span>
+		  	 	 <div class="special-sale-tbox2"><span class="special-sale-text1">买一赠一</span></div>
+		  	 	 <span class="special-sale-text2">￥{$sub.price}<i>￥{$sub.price*1.5}</i></span>
+		  	 </div>
+		  	{/volist}
+		  </div>
+		  
+		  {/volist}
+		  <!--优选水果结束-->
+	
+		  
+          
+      </div>
+      <!--bigbox结束-->
+      {include file="public/footer"/}
+      
+</div>
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="js/TouchSlide.1.1.js"></script>
+<script type="text/javascript" src="js/scrolltopcontrol.js"></script>
+<script>
+	$(function(){
+		$('.location').click(function(){
+			wx.getLocation({
+				  type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+				  success: function (res) {
+				    var latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+				    var longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+				    var speed = res.speed; // 速度，以米/每秒计
+				    var accuracy = res.accuracy; // 位置精度
+				    wx.openLocation({
+						  latitude: latitude, // 纬度，浮点数，范围为90 ~ -90
+						  longitude: longitude, // 经度，浮点数，范围为180 ~ -180。
+						  name: '西安', // 位置名
+						  address: '碑林区南二环', // 地址详情说明
+						  scale: 10, // 地图缩放级别,整形值,范围从1~28。默认为最大
+						  infoUrl: 'https://www.baidu.com' // 在查看位置界面底部显示的超链接,可点击跳转
+					});
+
+				  }
+				});			
+		});
+	})
+</script>
+<script>
+	TouchSlide({ 
+			slideCell:"#slideBox",
+			titCell:".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+			mainCell:".bd ul", 
+			effect:"leftLoop", 
+			autoPage:true,//自动分页
+			autoPlay:true, //自动播放
+		});
+</script>
+</body>
+</html>

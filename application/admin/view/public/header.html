@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>layout 后台大布局 - Layui</title>
+  <base href="__STATIC__/">
+  <link rel="stylesheet" href="layui/css/layui.css">
+  <link rel="stylesheet" type="text/css" href="admin/css/bootstrap.min.css">
+  <script src="layui/layui.js"></script>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">layui 后台布局</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">控制台</a></li>
+      <li class="layui-nav-item"><a href="">商品管理</a></li>
+      <li class="layui-nav-item"><a href="">用户</a></li>
+      <li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">邮件管理</a></dd>
+          
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="../uploads/758293770.jpg" class="layui-nav-img">
+          {$Think.session.admin.user}
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="">基本资料</a></dd>
+          <dd><a href="">安全设置</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="{:url('User/logout')}"><i class="layui-icon layui-icon-logout"></i>  臣退了</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">  
+      {volist name="menu" id="vo"}
+        {in name="vo.id" value="$Think.session.level"}<!-- 判断数组里有某个值 -->
+          <li class="layui-nav-item {eq name="pid" value="$vo.id"}layui-nav-itemed{/eq}">
+            <a class="" href="javascript:;">{$vo.menu_name}</a>
+            <dl class="layui-nav-child">
+             {volist name="vo['child']" id="s"}
+               {in name="s.id" value="$Think.session.level"}
+                <dd><a href="{:url($s.class_name)}">{$s.menu_name}</a></dd>
+                {/in}
+             {/volist} 
+            </dl>
+          </li>
+        {/in}
+      {/volist}      
+       
+      </ul>
+    </div>
+  </div>

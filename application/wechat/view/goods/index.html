@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" id="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="format-detection" content="telephone=no"/>
+<base href="__STATIC__/wechat/">
+<link href="css/reset.css" rel="stylesheet" type="text/css">
+<link href="css/classify.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="near-box">
+	<div class="yx-index-top">
+	  	 <div class="index-top-box2">
+	  	 	 <span class="fresh-toptext1">派送至：北京石景山</span>
+	  	 	 <span class="fresh-topimg1"></span>
+	  	 </div>
+	  	 <div class="index-top-box1">
+	  	 	<span class="index-top-img1"><img src="images/search3.png" alt=""></span>
+	  	 </div>
+	  </div>
+	<div class="classify-bigbox">
+	    <div class="classify-left">
+	    	<div class="classify-perch"></div>
+	    	<span class="classify-text1 pitch-on2">全部产品</span>
+	    	{volist name="cateall" id="vo"}
+	    	<a href="{:url('Cate/index',['cid'=>$vo.id])}"  class="classify-text1"> {$vo.name}</a>
+	    	{/volist}
+	    	<div class="classify-perch2"></div>
+	    </div>
+	    <div class="classify-right content2">
+	    	<div class="classify-perch-r"></div>
+	    	<div class="classify-right-title">
+	    		<span class="classifyrt-text1">综合排序</span>
+	    		<span class="classifyrt-text1 price">按价格<i class="sort-img"></i><i class="sort-img2" style="display: none;"></i></span>
+	    		<span class="classifyrt-text1 list-show">分类</span>
+	    	</div>
+	    	<div class="classify-list" style="display: none;">
+	    		<span class="classify-list-text1 pitch-on-cl">全部分类</span>
+	    		<span class="classify-list-text1">进口水果</span>
+	    		<span class="classify-list-text1">国产水果</span>
+	    		<span class="classify-list-text1">柑橘橙柚</span>
+	    		<span class="classify-list-text1">苹果/梨</span>
+	    		<span class="classify-list-text1">桃杏梅枣</span>
+	    	</div>
+	    	<!--商品列表循环-->
+	    	{volist name="listarr" id="vo"}
+            <div class="classify-box1">
+            	<a href="{:url('Goods/info',['id'=>$vo.id])}" class="classify-box1-img1"><img src="{$vo.pic}" alt=""></a>
+            	<div class="classify-box2">
+            		<a href="{:url('Goods/info',['id'=>$vo.id])}" class="classify-box2-text1">{$vo.name}</a>
+            		<span class="classify-box2-text2">￥{$vo.price}</span>
+            		<div class="shop-cart-box3">
+		    			<span class="shop-cart-subtract"></span>
+		    			<input type="tel" size="4" value="0" id="tb_count" class="shop-cart-numer">
+		    			<span class="shop-cart-add"></span>
+		    		</div>
+            	</div>
+            </div>
+	    	{/volist}
+	    	<!--商品列表循环-->
+	    	<div class="classify-perch2"></div>
+	    </div>
+	    
+	</div>
+	<!--底部-->
+	{include file="public/footer"/}
+</div>
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript">
+	function switab(tab,con,tab_c_css,tab_n_css,no) {  
+    $(tab).each(function(i){  
+        if(i == no)  
+        {  
+            $(this).addClass(tab_c_css);  
+        }else  
+        {  
+            $(this).removeClass(tab_c_css);  
+            $(this).addClass(tab_n_css);  
+        }  
+    })  
+    if (con)  
+    {  
+        $(con).each(function(i){  
+            if(i == no)  
+            {  
+                $(this).show();  
+            }else  
+            {  
+                $(this).hide();  
+            }  
+        })  
+    }  
+}  
+$(document).ready(function(){
+    $(".classify-text1").each(function(i){
+        $(this).click(function(){
+            switab('.classify-text1','.content2','pitch-on2','',i);        
+        })
+    })
+});
+
+$(".price").click(function () {
+        $(this).children(".sort-img").hide();
+        $(this).children(".sort-img2").show();
+        $(this).children(".sort-img2").toggleClass("img3");
+	});
+$(".classifyrt-text1").click(function () {
+        $(this).addClass("tcolor-yellow");
+        $(this).siblings(".classifyrt-text1").removeClass("tcolor-yellow");
+	});
+$(".list-show").click(function () {
+        $(this).parent(".classify-right-title").next(".classify-list").slideToggle();
+	});
+
+$(".shop-cart-add").click(function() {
+                var multi = 0;
+                var vall = $(this).prev().val();
+                vall++;
+                $(this).prev().val(vall);
+                TotalPrice();
+            });
+            $(".shop-cart-subtract").click(function() {
+                var multi = 0;
+                var vall = $(this).next().val();
+                vall--;
+                if(vall <= 0) {
+                    vall = 0;
+                }
+                $(this).next().val(vall);
+                TotalPrice();
+});
+
+</script>
+</body>
+</html>

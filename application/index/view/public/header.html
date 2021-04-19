@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <base href="__STATIC__/index/">
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/base.css">
+    
+    <script src="js/jquery.js"></script>
+    <script src="js/slidebanner.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/car.js"></script>
+    <script src="__STATIC__/layui/layui.js"></script>
+    
+</head>
+
+<body>
+    <div class="header">
+        <div class="top_nav">
+            <div class="container">
+                <div class="left">
+                    <div class="pic">
+                        <img src="images/common/header_icon.jpg" alt="">
+                    </div>
+                    <div>你好，欢迎来到新e潮商城！</div>
+                    {eq name="Think.session.user" value=""}
+                    <div class="login"><a href="{:url('User/login')}">登录</a></div>
+                    <div class="register"><a href="{:url('User/reg')}">注册</a></div>
+                    {else/}
+                    <div class="login" style="color: red">欢迎您: {$Think.session.user.user}</div>
+                    <div class="register"><a href="{:url('User/logout')}">注销</a></div>
+                    {/eq}
+                </div>
+                <div class="right">
+                    <ul>
+                        <li><a href="{:url('Vip/index')}">会员中心</a></li>
+                        <li>
+                            <a href="{:url('Order/index')}">我的订单<img src="images/common/down_icon.png" alt=""></a>
+                            <dl>
+                                <dd><a href="{:url('Order/index')}">我的订单</a></dd>
+                        
+                            </dl>
+                        </li>
+                        <li>
+                            <a href="{:url('Index/index')}">网站导航<img src="images/common/down_icon.png" alt=""></a>
+                            <dl>
+                                <dd><a href="http://www.daidu.com">百度</a></dd>
+                                <dd><a href="http://www.taobao.com">淘宝</a></dd>
+                                
+                            </dl>
+                        </li>
+                        <li><a href="#">手机商城</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="top_content">
+            <div class="container">
+                <div class="left">
+                    <div class="logo">
+                        <a href="{:url('Index/index')}"><img src="images/common/logo.jpg" alt=""></a>
+                    </div>
+                </div>
+                <div class="center">
+                    <div class="search">
+                    <form action="{:url('Goods/index')}">
+                        <input type="text" name="name"  placeholder="请输入关键词：">
+                        <input type="submit" value="搜索">
+                    </form>
+                    </div>
+                    <ul class="list">
+                        {volist name="hostwords" id="vo"}
+                            <li><a href="{:url('Goods/index',['cid'=>$vo.id])}">{$vo.name}</a></li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div class="right">
+                    <div class="cart">
+                        <div class="pic">
+                            <img src="images/common/car_icon.png" alt="">
+                        </div>
+                        <div class="text">
+                            <a href="{:url('Cart/index')}">购物车</a>
+                        </div>
+                        <div class="bubble">
+                            <span>{$shoopnum}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navBar">
+            <div class="container">
+                <div class="left">
+                    <h1>全部商品分类<img src="images/common/nav_icon.png" alt=""></h1>
+                    <ul>
+                        {volist name="cateall" id="vo"}
+                            <li><a href="{:url('Goods/index',['cid'=>$vo.id])}">{$vo.name}</a></li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div class="right">
+                    <div class="nav">
+                        <ul>
+                            <li><a href="{:url('Index/index')}">首页</a></li>
+                            {volist name="nav" id="vo"}
+                                <li><a href="{:url('Goods/index',['nid'=>$vo.id])}">{$vo.menu_name}</a></li>
+                            {/volist}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        

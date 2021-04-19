@@ -1,0 +1,120 @@
+{include file="public/header"/}<!-- 包含头部模版header -->
+
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <script src="js/index.js"></script>
+        <div class="banner">
+            <div class="carousel">
+                <ul>    
+                    {volist name='bannerlist' id='vo'}
+                        <li>
+                            <a href="{:url('Index/index')}"><img src="{$vo.pic}" alt="" width="1920" height="700"></a>
+                        </li>
+                    {/volist}  
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="middle">
+        <div class="container">
+            <div class="breadCrumb">
+                <div class="title">
+                    <ul class="clear">
+                      {volist name='cate' id='vo'}
+                        <li {eq name="$i" value="1" }class="on"{/eq}><span>{$vo.name}</span></li>
+                      {/volist}
+                    </ul>
+                </div>
+                <div class="content">
+                    {volist name="cate" id="vo"}
+                    <div {eq name="$i" value="1" }class="on"{/eq}>
+                        <ul class="clear">
+                        {volist name="vo['child']" id="sub"}
+                            <li>
+                                <div class="pic">
+                                    <a href="{:url('Goods/info',['id'=>$sub.id])}"><img src="{$sub.pic}" alt="" width="238" height="175"></a>
+                                </div>
+                                <h2><a href="{:url('Goods/info',['id'=>$sub.id])}">{$sub.name}</a></h2>
+                                <div class="price"><span><b>￥</b>{$sub.price}</span><span><b>￥</b>{$sub.price*1.5}</span></div>
+                                <div class="btn"><a href="{:url('Goods/info',['id'=>$sub.id])}">查看详情 》</a></div>
+                            </li>
+                        {/volist}
+                        </ul>
+                    </div>
+                    {/volist}
+                </div>
+            </div>
+            <div class="show">
+            {volist name="floor" id="vo"}
+                <div>
+                    <div class="title">
+                        <h2>{$vo.name}<img src="images/index/ring.jpg" alt=""></h2>
+                        <div></div>
+                    </div>
+                    <div class="content">
+                    {volist name="vo['nav']" id="v" key="kone"}
+                       {eq name="$kone" value="1"}
+                        <div class="left">
+                            <div class="big-info">
+                                <h1><a href="{:url('Index/index')}">{$v.name}</a></h1>
+                                
+                            </div>
+                            <ul class="big-list">
+                                {$v.into}
+                            </ul>
+                            <a href="{:url('Index/index')}"><img src="{$v.pic.0}" alt="" width="300" height="511"></a>
+                        </div>
+                          {/eq}
+                    {/volist}
+                        <div class="right">
+                            <ol class="shop-list">
+                            {volist name="vo['child']" id="sub"}
+                                {eq name="$i" value="1"}
+                                <li>
+                                    <a href="{:url('Goods/info',['id'=>$sub.id])}"><img src="{$sub.pic}" alt="" width="148" height="108"></a>
+                                    <h2><a href="{:url('Goods/info',['id'=>$sub.id])}">{$sub.name}</a></h2>
+                                    <p>￥{$sub.price} <del>￥{$sub.price*1.5}</del></p>
+                                </li>
+                                {/eq}
+                            {/volist}
+                           
+                                <li>
+                                    <div class="icon"><img src="images/index/icon1.png" alt=""></div>
+                                    <div class="carousel">
+                                        <ul>
+                                        {volist name="vo['nav'][1]['pic']" id="v" key="kone"}
+                                            <li>
+                                                <a href="{:url('Index/index')}"><img src="{$v}" alt=""></a>
+                                            </li>
+                                        {/volist}
+                                        </ul>
+                                    </div>
+                                    <div class="carousel-icon">
+                                        <ul>
+                                         {volist name="vo['nav'][1]['pic']" id="v"}
+                                            <li {eq name="$i" value="1" }class="on"{/eq}></li>
+                                         {/volist}
+                                        </ul>
+                                    </div>
+                                </li>
+                                
+                                {volist name="vo['child']" id="sub"}
+                                {egt name="$i" value="2"}
+                                <li>
+                                    <a href="{:url('Goods/info',['id'=>$sub.id])}"><img src="{$sub.pic}" alt="" width="148" height="108"></a>
+                                    <h2><a href="{:url('Goods/info',['id'=>$sub.id])}">{$sub.name}</a></h2>
+                                    <p>￥{$sub.price} <del>￥{$sub.price*1.5}</del></p>
+                                </li>
+                                {/egt}
+                                {/volist}
+                               
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            {/volist}
+               
+            </div>
+        </div>
+    </div>
+    
+{include file="public/footer"/}<!-- 包含头部模版footer -->

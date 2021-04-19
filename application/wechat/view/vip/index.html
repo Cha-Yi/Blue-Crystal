@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" id="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="format-detection" content="telephone=no"/>
+<base href="__STATIC__/wechat/">
+<link href="css/reset.css" rel="stylesheet" type="text/css">
+<link href="css/personal-center.css" rel="stylesheet" type="text/css">
+<script src="https://res2.wx.qq.com/open/js/jweixin-1.6.0.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    wx.config({$json});
+</script>
+</head>
+<body>
+<div class="near-box">
+      <div class="index-bigbox" style="margin-top: 0px;">
+          <!--头部开始-->
+          <div class="personal-top">
+          	 <img src="images/599aa36d5e4a4.jpg" alt="" class="personal-img">
+          	 <div class="personal-top-box1">
+          	 	<span class="personal-top-img1"><img src="{$Think.session.wechat.avatar}" alt=""></span>
+          	 	<div class="personal-top-box2">
+          	 		<span class="personal-top-text1">{$Think.session.wechat.nickname}</span>
+          	 	</div>
+          	 </div>
+          </div>
+          <!--头部结束--> 
+          <!--代付款分类开始-->
+          <div class="personal-box1 mbt-05">
+          	   <a href="{:url('Pay/index')}" class="personal-box2 box3">
+          	      <span class="personal-box1-img1"><img src="images/personal-center-img1.png" alt=""></span>
+          	      <span class="personal-box1-text1">待付款</span>
+          	   </a>
+          	   <a href="my-indent-dfh.html" class="personal-box2 box3">
+          	      <span class="personal-box1-img1"><img src="images/personal-center-img2.png" alt=""></span>
+          	      <span class="personal-box1-text1">待发货</span>
+          	   </a>
+          	   <a href="my-indent-dsh.html" class="personal-box2 box3">
+          	      <span class="personal-box1-img1"><img src="images/personal-center-img3.png" alt=""></span>
+          	      <span class="personal-box1-text1">待收货</span>
+          	   </a>
+          	   <a href="my-indent-pj.html" class="personal-box2 box3">
+          	      <span class="personal-box1-img1"><img src="images/personal-center-img4.png" alt=""></span>
+          	      <span class="personal-box1-text1">待评价</span>
+          	   </a>
+          	   <a href="my-indent-all.html" class="personal-box2 box3">
+          	      <span class="personal-box1-img1"><img src="images/personal-center-img5.png" alt=""></span>
+          	      <span class="personal-box1-text1">全部订单</span>
+          	   </a>
+          </div>
+          <!--代付款分类结束-->
+          <!--功能分类开始-->
+          <a href="discount-coupon.html" class="personal-box5">
+          	  <span class="personal-box5-img1"><img src="images/personal-center-img10.png" alt=""></span>
+          	  <span>我的优惠券</span>
+          </a>
+          <a href="receiving-adress-list.html" class="personal-box5">
+          	  <span class="personal-box5-img1"><img src="images/personal-center-img11.png" alt=""></span>
+          	  <span>收货地址</span>
+          </a>
+          <a href="news-center.html" class="personal-box5">
+          	  <span class="personal-box5-img1"><img src="images/personal-center-img12.png" alt=""></span>
+          	  <span>售后服务</span>
+          </a>
+          <span class="personal-box5-text2 scan">扫一扫</span>
+          <span class="personal-box5-text2">退出登录</span>
+      </div>
+      <!--bigbox结束-->
+      {include file="public/footer"/}
+</div>
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script>
+     $(function(){
+          //拍照或从手机相册中选图
+          $('.personal-top-img1').click(function(){
+               wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                      var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                      $('.personal-top-img1 img').attr('src',localIds[0]);
+                      var headimg = localIds[0];
+                      $.post("{:url('Vip/editimg')}",{'headimgurl':headimg},function(res){
+                          if (res.code == 1) {
+                            $('.personal-top-img1 img').attr('src',res.imgurl);
+
+                          }else{
+                            $('.personal-top-img1 img').attr('src',localIds[0]);
+                          }
+                      })
+                    }
+               });
+          })
+          //扫一扫接口
+         $('.scan').click(function(){
+               wx.scanQRCode({
+                    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                    scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                    success: function (res) {
+                    var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                    }
+               });
+         })
+    })
+</script>
+</body>
+</html>

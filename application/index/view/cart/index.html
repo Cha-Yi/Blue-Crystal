@@ -1,0 +1,167 @@
+{include file="public/header"/}<!-- 包含头部模版header -->
+    <link rel="stylesheet" type="text/css" href="css/guessYouLike.css">
+    <link rel="stylesheet" type="text/css" href="css/shop_cart.css">
+    <link rel="stylesheet" type="text/css" href="css/table.css">
+    <script src="js/num.js"></script>    
+    <script src="js/loadShopData.js"></script>    
+    <script src="js/shopCar.js"></script>
+    <script src="js/guess.js"></script>
+
+    <div class="middle">
+        <div class="container">
+            <div class="head">
+            <input type="hidden" id="count" value="">
+                <div class="title fl">
+                    购物车页
+                </div>
+                <div class="head-bar fr">
+                    <ul>
+                        <li class="on active first">
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>1</span></div>
+                            </div>
+                            <p>我的购物车</p>
+                        </li>
+                        <li>
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>2</span></div>
+                            </div>
+                            <p>确认订单</p>
+                        </li>
+                        <li>
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>3</span></div>
+                            </div>
+                            <p>确认地址</p>
+                        </li>
+                        <li class="last">
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>4</span></div>
+                            </div>
+                            <p>提交订单</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="allSelect">
+                                    <input type="checkbox" value="">
+                                    <span>全选</span>
+                                </label>
+                                商品
+                            </th>
+                            <th>价格（元）</th>
+                            <th>数量</th>
+                            <th>小计（元）</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                {volist name="cart" id="vo"}
+                        <tr>
+                            <td class="goods">
+                                <label class="fl">
+                                    <input type="checkbox" class="checkbox" value="{$vo.id}">
+                                    <span></span>
+                                </label>
+                                <a href="{:url('Goods/info',['id'=>$vo.id])}" class="fl"><img src="{$vo.goods.pic[0]}">
+                                </a>
+                                <h3>
+                                    <a class="proName" href="{:url('Goods/info',['id'=>$vo.id])}">{$vo.goods.name}</a>
+                                </h3>
+                                <dl>
+                                    {$vo.aid}
+                                </dl>
+                            </td>
+                            <td class="price">￥{$vo.goods.price}</td>
+                            <td>
+                                <div class="num">
+                                    <button class="numSub" type="button" cartid="{$vo.id}" count="{$vo.goods.count}" >-</button>
+                                    <input class="numValue" type="text" name="" value="{$vo.num}">
+                                    <button class="numAdd" type="button" cartid="{$vo.id}" count="{$vo.goods.count}" >+</button>
+                                    <p>库存{$vo.goods.count}件</p>
+                                    <input type="hidden" id="url" value="{:url('Cart/edit')}" name="">
+                                </div>
+                            </td>
+                            <td class="subtotal">￥{$vo.goods.price*$vo.num}</td>
+                            <td class="operation">
+                                <a class="delete" url="{:url('Cart/del',['id'=>$vo.id])}">删除</a><br>
+                                {eq name="vo.type" value="0"}
+                                    <a class="collect"  type="0" gid="{$vo.gid}" aid="{$vo.aid}">收藏</a>
+                                    {else/}
+                                    <a class="collect"  type="1" gid="{$vo.gid}" aid="{$vo.aid}" style="color: orange;" >已收藏</a>
+                                {/eq}
+                            </td>
+                        </tr>
+                {/volist}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">
+                                <label class="allSelect">
+                                    <input type="checkbox"  value="">
+                                    <span>全选</span>
+                                </label>
+                                <a class="groupDel" url="{:url('Cart/delall')}">批量删除</a>
+                                <a href="{:url('Index/index')}">返回继续购物</a>
+                            </th>
+                            <th colspan="3">
+                                <span>共计 <em class="totalCount">3</em> 件商品</span>
+                                <span>总价：<em class="totalPrice">￥2597</em></span>
+                                <button class="btn" id="settleAccounts" type="button" url="{:url('Cart/conform')}">去结算</button>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            {include file="public/guess"/}<!-- 加载猜你喜欢-->
+        </div>
+    </div>
+<script type="text/javascript">
+    layui.use(['jquery','layer'], function(){
+        var layer= layui.layer;
+        $('.collect').click(function(){
+            var type = $(this).attr('type');
+            var gid = $(this).attr('gid');
+            var aid = $(this).attr('aid');
+            var that = $(this);
+            $.post("{:url('Goods/collect')}",{'gid':gid,'aid':aid,'type':type},function(res){
+                if (res.code==1) {
+                    layer.msg("操作成功");
+                    if (res.msg==1) {
+                        that.html('<font style="color:orange;">已收藏</font>');
+                        that.attr('type',1);
+                    }else{
+                        that.html('收藏');
+                        that.attr('type',0);
+                    }
+                }else{
+                    layer.msg(res.msg);
+                }
+                // window.location.reload();
+            })
+        })
+        /*$(function(){ 
+            pushHistory(); 
+            window.addEventListener("popstate", function(e) { 
+                    $('.totalCount').click();
+                }, false); 
+                function pushHistory() { 
+                    var state = { 
+                        title: "title", 
+                        url: "#"
+                    }; 
+                window.history.pushState(state, "title", "#"); 
+            } 
+        }); */   
+    })
+</script>
+{include file="public/footer"/}

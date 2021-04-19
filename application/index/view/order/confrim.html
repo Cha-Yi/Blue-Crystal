@@ -1,0 +1,132 @@
+{include file="public/header"/}
+    <link rel="stylesheet" type="text/css" href="css/guessYouLike.css">
+    <link rel="stylesheet" type="text/css" href="css/shop_cart.css">
+    <link rel="stylesheet" type="text/css" href="css/table.css">
+    <link rel="stylesheet" type="text/css" href="css/confirm_order.css">
+    <link rel="stylesheet" type="text/css" href="css/submit_order.css">
+ 
+
+    <script src="js/submit_order.js"></script>
+    <script src="js/guess.js"></script>
+
+    <div class="middle">
+        <div class="container">
+            <div class="head">
+                <div class="title fl">
+                    提交订单<a href="shop_cart.html">返回购物车修改</a>
+                </div>
+                <div class="head-bar fr">
+                    <ul>
+                        <li class="on first">
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>1</span></div>
+                            </div>
+                            <p>我的购物车</p>
+                        </li>
+                        <li class="on ">
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>2</span></div>
+                            </div>
+                            <p>确认订单</p>
+                        </li>
+                        <li class="on">
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>3</span></div>
+                            </div>
+                            <p>确认地址</p>
+                        </li>
+                        <li class="last on active">
+                            <div class="box">
+                                <div class="bar"></div>
+                                <div class="radio"><span>4</span></div>
+                            </div>
+                            <p>提交订单</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <div class="box">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>商品</th>
+                                <th>价格（元）</th>
+                                <th>数量</th>
+                                <th>小计（元）</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="cart.cartarr" id="vo"}
+                        <tr>
+                            <td class="goods" style="width: 571px;">
+                                <a href="{:url('Goods/info',['id'=>$vo.goods.id])}" class="fl"><img src="{$vo.goods.pic[0]}">
+                                </a>
+                                <h3>
+                                    <a class="proName" href="{:url('Goods/info',['id'=>$vo.goods.id])}">{$vo.goods.name}</a>
+                                </h3>
+                                <dl>
+                                    {$vo.aid}
+                                </dl>
+                            </td>
+                            <td class="price">￥{$vo.goods.price}</td>
+                            <td>
+                                <div class="num">
+                                    {$vo.num}
+                                    
+                                </div>
+                            </td>
+                            <td class="subtotal">￥{$vo.goods.price*$vo.num}</td>
+                            
+                        </tr>
+                       {/volist} 
+                        </tbody>
+                    </table>
+                </div>
+                <div class="distribution">
+                    <h1>配送信息<a href="{:url('Address/index')}">修改</a></h1>
+                    <div>
+                        <span class="name">{$address.a_name}</span><span class="phone">{$address.tel}</span><span class="address">{$address.province}{$address.city}{$address.area}{$address.road}</span>
+                    </div>
+                </div>
+                <div class="foot">
+                    <div class="fl">
+                        <a href="{:url('Index/index')}">返回继续购物</a>
+                    </div>
+                    <div class="fr">
+                        <span>共计 <em class="totalCount">{$cart.totalnum}</em> 件商品</span>
+                        <span>总价：<em class="totalPrice">￥{$cart.sumtotal}</em></span>
+                        <button class="btn" id="submitOrder" type="button" url="{:url('Order/add')}" payurl="{:url('Pay/index')}">提交订单</button>
+                    </div>
+                </div>
+            </div>
+            {include file="public/guess"}
+        </div>
+    </div>
+   
+    <div class="shade">
+
+    </div>
+    <div class="success-order">
+        <h3>恭喜你！</h3>
+        <h1><img src="images/submit_order/submit_success.png" alt="">订单提交成功</h1>
+        <p class="order-number"></p>
+        <h3>请前往<a href="#">支付</a></h3>
+        <p>你可以返回：<a href="{:url('Index/index')}">首页</a><a class="shopping-cart" href="{:url('Cart/index')}">购物车</a> </p>
+    </div>
+    <div class="fail-order">
+        <h3>对不起...</h3>
+        <img src="images/submit_order/submit_fail.png" alt="">
+        <h1>订单提交失败</h1>
+        <h3>点击重新<a href="submit_order.html">提交</a></h3>
+        <p>你可以返回：<a href="{:url('Index/index')}">首页</a><a href="{:url('Cart/index')}">购物车</a> </p>
+    </div>
+<script type="text/javascript">
+    layui.use(['jquery','layer'], function(){
+
+    })
+</script>
+{include file="public/footer"/}

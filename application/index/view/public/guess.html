@@ -1,0 +1,14 @@
+<div class="guessYouLike">
+                <h3>猜你喜欢</h3>
+                <ul class="clear">
+                {volist name="guessarr" id="vo"}
+                    <li>
+                        <a href="{:url('Goods/info',['id'=>$vo.id])}"><img src="{$vo.pic}" alt="" width="202" height="209"></a>
+                        <p><a href="{:url('Goods/info',['id'=>$vo.id])}">{$vo.name}</a></p>
+                        <span><i>￥</i>{$vo.price}</span>
+                        <button type="button">商品详情</button>
+                    </li>
+                {/volist}
+                    
+                </ul>
+</div>

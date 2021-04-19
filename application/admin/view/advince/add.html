@@ -1,0 +1,136 @@
+{include file="public/header" /}
+<style type="text/css">
+	.img{cursor: pointer;}
+</style>
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Advince/add')}">广告位添加</a>
+		 
+		</span>
+	
+		
+	<form class="layui-form" action="" style="margin-top: 20px;">
+	<input type="hidden" name="pic" id="pic">
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">名称</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="name" required  lay-verify="required|name" placeholder="请输入广告位名称" autocomplete="off" class="layui-input">
+	    </div>
+	  </div>
+
+	<div class="layui-form-item">
+	 <label class="layui-form-label">商品图片</label>
+	 <div class="layui-input-block">
+	  <div class="layui-upload">
+		  <button type="button" class="layui-btn" id="test2">多图片上传</button> 
+		  <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+		    预览图：
+		    <div class="layui-upload-list" id="demo2"></div>
+		 </blockquote>
+	  </div>
+	 </div>
+	</div>
+
+	<div class="layui-form-item layui-form-text" style="position: relative;z-index: 1;">
+	    <label class="layui-form-label">广告内容</label>
+	    <div class="layui-input-block">
+	      <script id="container" name="into" type="text/plain">
+          </script>
+	    </div>
+	  </div>
+	    
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button type="button" class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+	</form>
+<script type="text/javascript" src="admin/js/jquery.min.js"></script>
+ <!-- 配置文件 -->
+ <script type="text/javascript" src="admin/ueditor/ueditor.config.js"></script>
+ <!-- 编辑器源码文件 -->
+ <script type="text/javascript" src="admin/ueditor/ueditor.all.js"></script>
+	<script>
+			//Demo
+			var num =0;
+			layui.use(['form','jquery','upload'], function(){
+			  var form = layui.form,$=layui.jquery,upload = layui.upload;
+			  var ue = UE.getEditor('container'),str='';
+
+			 //自定义验证规则
+				form.verify({
+					name: [/^[\S]{3,12}$/,'文章标题必须3到12位']
+					
+				});
+
+			 //多图片上传
+		  	 upload.render({
+		   	 elem: '#test2'//点击元素
+		   	 ,url: '{:url("Goods/upload")}' //改成您自己的上传接口
+		     ,multiple: true//多图选中
+		     ,number:6
+		     ,before: function(obj){
+		      //预读本地文件示例，不支持ie8
+		      obj.preview(function(index, file, result){
+		        $('#demo2').append('<img width="92" height="92" style="margin:0 10px 10px 0" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img img" onclick="delimg(this,'+num+')" id='+num+'>')
+		        num++;
+		      });
+		      
+		    }
+		    ,done: function(res){
+		     	if (res.code==1) {
+		     		str = str!=''?str+"|"+res.msg:res.msg;
+		     		$('#pic').val(str);
+		     	}else{
+		     		layer.msg(res.msg,{icon:2})
+		     	}
+		    }
+		  });  
+  		
+			  //监听提交
+			  form.on('submit(formDemo)', function(data){
+			  if ($('#pic').val()=='') {
+			  	layer.msg("请上传图片");
+			  	return false;
+			  }
+			  	var data=JSON.stringify(data.field);
+			   $.post("{:url('Advince/add')}",{'data':data},function(res){
+			   	if (res.code==1) {
+			   		layer.msg(res.msg,{icon:1,time:500},function(){
+			   			window.location.href="{:url('Advince/index')}";
+			   		})
+			   	}else{
+			   		layer.msg(res.msg);
+			   	}
+			   })
+			    return false;
+			  });
+			});
+			//删除图片
+			function delimg(obj,num){
+					// var index=obj.getAttribute('key');//对应下标
+					// if ($('#demo2').children('.img').length==1) {
+					// 	index=0;//获取的对象
+					// }
+					var tstr= $('#pic').val();//定义tstr
+					var arr=tstr.split("|");//JavaScript字符串转数组
+					arr.splice(num, 1);//删除数组对应值(从哪开始,删除几个)
+					var newstr = arr.join("|");//将数组转换字符串
+					$('#pic').val(newstr);//将原有的val给修改
+					// $('#demo2').children('.img').eq(index).remove();//重新查找的对象进行删除
+					$('#'+num).remove();
+					// num=0;
+			}
+//获取的对象与重新查找的对象的下标不匹配导致删除不一致
+
+	</script>
+			 
+	</div>
+  </div>
+  
+{include file="public/footer" /}

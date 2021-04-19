@@ -1,0 +1,112 @@
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    © layui.com - 底部固定区域
+  </div>
+</div>
+
+<script>
+//JavaScript代码区域
+layui.use(['element','jquery','layer','form'], function(){
+  var element = layui.element,
+    $ = layui.jquery,
+    form=layui.form;
+//单条删除
+  $('.del').click(function(){
+    var that=$(this);
+        layer.confirm('确认删除?',{title:'温馨提示',icon:3},function(res){
+          var iid= that.attr('iid'),url= that.attr('url');//获取自定义属性
+          $.post(url,{'iid':iid},function(res){
+            if (res.code==1) {
+              layer.msg(res.msg,{time:500},function(){
+                  window.location.reload();
+              })
+            }else{
+              layer.msg(res.msg);
+            }
+          })
+        });
+    })
+
+  //多选
+  // $('#checkall').click(function(){
+  //   var check = $(this).prop('checked');
+  //   $('.check').prop('checked',check);
+
+  // })
+  //监听指定开关全选
+  form.on('checkbox(checkall)', function(data){
+
+    var check = this.checked;
+    $('.check').prop('checked',check);
+    form.render('checkbox');//重新渲染页面,页面没有更新而已
+  
+  });
+  //监听指定开关单选
+  form.on('checkbox(check)', function(data){
+
+    var len= $('.check').length,num=0;
+    $('.check').each(function(index){
+      if ($('.check').eq(index).prop('checked')) {
+        num++;
+      }
+      if (num==len) {
+        $('#checkall').prop('checked',true);
+        }else{
+          $('#checkall').prop('checked',false);
+        }
+    })
+    form.render('checkbox');//重新渲染页面,页面没有更新而已
+  
+  });
+  
+  // //单选
+  // $('.check').click(function(){
+  //   var len= $('.check').length,num=0;
+  //   $('.check').each(function(index){
+  //     if ($('.check').eq(index).prop('checked')) {
+  //       num++;
+  //     }
+  //   })
+  //   if (num==len) {
+  //     $('#checkall').prop('checked',true);
+  //   }else{
+  //     $('#checkall').prop('checked',false);
+  //   }
+  // })
+
+  //多条删除
+  $('#delall').click(function(){
+    var arr = [];
+      $('.check').each(function(i){
+        if ($('.check').eq(i).prop('checked')) {
+            arr.push($('.check').eq(i).val());
+        }
+       
+        
+      })
+       var str= arr.join(','),url=$(this).attr('url');
+       console.log(str);
+       if (str=='') {
+        layer.msg("请选中要删除的选项");
+      }else{
+        layer.confirm('确认删除?',{title:'温馨提示',icon:3},function(){
+
+        $.post(url,{'ids':str},function(res){
+        if (res.code==1) {
+          layer.msg(res.msg,{time:500},function(){
+            window.location.reload();
+          })
+        }else{
+          layer.msg(res.msg);
+        }
+
+        })
+       })
+      }
+     
+      
+  })
+});
+</script>
+</body>
+</html>

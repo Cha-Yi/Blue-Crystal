@@ -1,0 +1,203 @@
+{include file="public/header"/}
+    <link rel="stylesheet" type="text/css" href="css/member.css">
+    <link rel="stylesheet" type="text/css" href="css/sub_nav.css">
+    <link rel="stylesheet" type="text/css" href="css/modify.css">
+    <link rel="stylesheet" type="text/css" href="css/imformation_modify.css">
+    <link rel="stylesheet" type="text/css" href="__STATIC__/layui/css/layui.css">
+    <script src="js/imformation_modify.js"></script>
+
+    <script language="javascript" type="text/javascript" src="__STATIC__/My97DatePicker/WdatePicker.js"></script>
+
+    <div class="middle">
+        <div class="container clear">
+            <div class="sub-nav fl">
+                <dl>
+                    <dt><a href="#">设置</a></dt>
+                    <dd class="on"><a href="{:url('Vip/info')}">个人信息</a></dd>
+                    <dd><a href="#">账号绑定</a></dd>
+                    <dd><a href="{:url('Vip/edit')}">账户安全</a></dd>
+                    <dd><a href="#">我的等级</a></dd>
+                    <dd><a href="{:url('address/index')}">收货地址</a></dd>
+                    <dd><a href="#">消费记录</a></dd>
+                    <dd><a href="#">快捷支付</a></dd>
+                    <dd><a href="#">应用授权</a></dd>
+                </dl>
+            </div>
+            <div class="content fl">
+                <div class="head-nav">
+                    <a class="on">基本信息</a>
+                    
+                </div>
+                <div class="box">
+                    <div class="fr">
+                        <img class="fl" src="{$info.pic.0}" alt="">
+                        <h2>用户名：{$info.nickname}</h2>
+                        <p>购物行为评级：<span></span><span></span><span></span></p>
+                        <p>会员类型：高级会员</p>
+                        <div class="clear"></div>
+                        <p>注：修改手机和邮箱请到<a href="{:url('Vip/edit')}">账户安全</a></p>
+                    </div>
+                    <div class="tab" >
+                        <form action="" method="" id="form">
+                        <input type="hidden" name="pic" id="pic">
+                            <div>
+                                <label for=""><b>*</b>昵称：</label><input type="text" name="nickname"  placeholder="请输入昵称" lay-verify="required">
+                            </div>
+                            <div class="sex" >
+                                <label for=""><b>*</b>性别：</label>
+                                <label ><input name="sex" type="radio" value="1" >男</label>
+                                <label "><input type="radio" name="sex" value="2" >女</label><label >
+                            </div>
+                            <div >
+                                    <label ><b>*</b>生日：</label>
+                                    <input type="text"  placeholder="年-月-日"  name="birthday" onClick="WdatePicker()">
+                            </div> 
+                            <div>
+                                <label for=""><b>*</b>真实姓名：</label><input type="text" name="name" lay-verify="required" placeholder="请输入真实姓名">
+                            </div>
+            
+                             <div class="layui-upload layui-form">
+                                  <label for=""><b>*</b>头像：</label>
+                                  <button type="button" class="layui-btn" required id="test1">上传图像</button>
+                                  <div class="layui-upload-list">
+                                    <img class="layui-upload-img"  id="demo1" style="margin-left: 80px">
+                                    <p id="demoText"></p >
+                                  </div>
+                                </div>
+
+                            <div class="address">
+                                <label for="">
+                                    <b>*</b>所在地区：
+                                </label>
+                                <select name="province" id="province">
+                                    <option>请选择所在省份</option>
+                                    {volist name="provinces" id="vo"}
+                                    <option value="{$vo.province}" code="{$vo.provinceid}">{$vo.province}</option>
+                                    {/volist}
+                                </select>
+                                <select name="city" id="city">
+                                    <option>请选择所在城市</option>
+                                    
+                                </select>
+                                <select name="area" id="area">
+                                    <option>请选择所在区县</option>
+                                    
+                                </select>
+                            </div>
+                            <div class="address-detail">
+                                <label for="">详细地址：</label><input type="text" name="road" placeholder="请输入详细地址" lay-verify="required">
+                            </div>
+                            <button class="btn" lay-submit="" type="button" lay-filter="demo1" id="btn">提交</button>
+                        </form>
+                    </div>
+                    
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+{include file="public/footer"/}
+<script>
+layui.use(['upload','layer','form'], function(){
+  var form = layui.form
+      ,upload = layui.upload;
+    
+        //获取city
+        $('#province').change(function(){
+            var code = $('#province').find('option:selected').attr('code');
+            $.post("{:url('Vip/getcity')}",{'provinceid':code},function(res){
+                if (res.code == 1) {
+                    
+                    $('#city').empty();//清除
+                    $('#area').empty();
+                    $('#area').append("<option>请选择所在区县</option>");
+                    var str = '<option>请选择所在城市</option>';
+                    for (var i = 0; i < res.info.length; i++) {
+                        str += "<option value="+res.info[i].city+" code="+res.info[i].cityid+">"+res.info[i].city+"</option>";
+                    }
+                    $('#city').append(str);
+                }else{
+                    $('#city').empty();//清除
+                    $('#area').empty();
+                    $('#city').append("<option>请选择所在城市</option>");
+                    $('#area').append("<option>请选择所在区县</option>");
+                }
+
+            })
+        })
+        //获取area下拉框状态改变触发change
+        $('#city').change(function(){
+            var code = $('#city').find('option:selected').attr('code');
+            $.post("{:url('Vip/getcity')}",{'cityid':code},function(res){
+                if (res.code == 1) {
+                    
+                    $('#area').empty();
+                    var str = '<option>请选择所在区县</option>';
+                    for (var i = 0; i < res.info.length; i++) {
+                        str += "<option value="+res.info[i].area+" code="+res.info[i].cityid+">"+res.info[i].area+"</option>";
+                    }
+                    $('#area').append(str);
+                }else{
+                    $('#city').empty();//清除
+                    $('#area').empty();
+                    $('#city').append("<option>请选择所在城市</option>");
+                    $('#area').append("<option>请选择所在区县</option>");
+                }
+
+            })
+        })
+        //普通图片上传
+              var uploadInst = upload.render({
+                elem: '#test1'
+                ,url: '{:url("Vip/upload")}' //改成您自己的上传接口
+                ,before: function(obj){
+                  //预读本地文件示例，不支持ie8
+                  obj.preview(function(index, file, result){
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                  });
+                }
+                ,done: function(res){
+                    //上传成功
+                  if(res.code == 1){
+                    $('#pic').val(res.msg);//更改隐藏域的value值
+                  }else{
+                    layer.msg(res.msg);
+                  }
+                  
+                }
+                ,error: function(){
+                  //演示失败状态，并实现重传
+                  var demoText = $('#demoText');
+                  demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                  demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                  });
+                }
+              });
+            
+})
+
+    //提交表单
+        $('#btn').click(function(){
+              if ($('#pic').val()=='') {
+                layer.msg("请上传图片");
+                return false;
+              }
+            var obj = {};
+                 $($("#form").serializeArray()).each(function(){
+                     obj[this.name] = this.value;
+                 });
+                var data = JSON.stringify(obj);
+          
+            $.post("{:url('Vip/info')}",{'data':data},function(res){
+                if (res.code == 1) {
+                    layer.msg("修改成功",{'icon':1},function(){
+                        window.location.reload();
+                    });
+
+                }else{
+                    layer.msg("提交失败");
+                }
+            })
+          })
+</script>

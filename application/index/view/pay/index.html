@@ -1,0 +1,33 @@
+{include file="public/header"/}<!-- 包含头部模版header -->
+<link rel="stylesheet" type="text/css" href="css/payment.css">
+<div id="container">
+  <div class="info">
+    <img src="images/pay/ill.gif"/>
+    <p class="p1">您的订单已生成，请尽快付款</p>
+    <p>应付金额：<span>￥{$Think.session.sumtotal}</span></p>
+    <p>请您在提交订单后<span>72</span>小时内完成支付，否则订单会自动取消</p>
+  </div>
+  
+<form action="" method="post">
+  <div class="bank" id="payway"><!--选择支付方式-->
+    <div>
+        <div class="title">您可以选择付款方式</div>
+               
+        <p>平台支付</p>
+        <ul>           
+            <li>
+                <input class="rd" type="radio" name="pay" value="1" checked />
+                <img src="images/pay/alipay.jpg" />
+            </li>
+            <li>
+                <input class="rd" type="radio" name="pay" value="2"/>
+                <img src="images/pay/wechat.jpg" />
+            </li>
+            <p class="cle"></p>
+        </ul>       
+    </div>
+    <input class="gopay" type="submit" value="前往支付"/>
+  </div>
+</form>
+</div>
+{include file="public/footer"/}

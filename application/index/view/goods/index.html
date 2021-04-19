@@ -1,0 +1,174 @@
+{include file="public/header"/}<!-- 包含头部模版header -->
+
+    <link rel="stylesheet" type="text/css" href="css/guessYouLike.css">
+    <link rel="stylesheet" type="text/css" href="css/shop_list.css">
+   
+    <script src="js/shop_list.js"></script>
+    <script src="js/guess.js"></script>
+
+    <div class="middle">
+        <div class="container">
+            <div class="sub-nav">
+                <dl>
+                    <dt><a href="{:url('Index/index')}">首页</a></dt>
+                   
+                </dl>
+            </div>
+            <div class="commodity">
+                <div class="clear brand">
+                    <div class="left">
+                        <div>品牌</div>
+                    </div>
+                    <div class="center">
+                        <ul>
+                        {volist name="brand" id="vo"}
+                            <li {eq name="bid" value="$vo.id"}class="on"{/eq}><a href="{:url('Goods/index',['nid'=>$nid,'bid'=>$vo.id,'section'=>$section,'people'=>$peoplearr,'cid'=>$cid])}">{$vo.name}</a></li>
+                        {/volist}
+                            
+                        </ul>
+                    </div>
+                    
+                </div>
+                <div class="clear ">
+                    <div class="left">
+                        <div>分类</div>
+                    </div>
+                    <div class="center">
+                        <ul>
+                            {volist name="cate" id="vo"}
+                            <li {eq name="cid" value="$vo.id"}class="on"{/eq}><a href="{:url('Goods/index',['nid'=>$nid,'cid'=>$vo.id,'bid'=>$bid,'section'=>$section,'people'=>$peoplearr])}">{$vo.name}</a></li>
+                        {/volist}
+                        </ul>
+                    </div>
+                    
+                </div>
+                <div class="clear priceRange">
+                    <div class="left">
+                        <div>价格范围（￥）</div>
+                    </div>
+                    <div class="center">
+                        <ul>
+                            {volist name="price" id="vo"}
+                            <li {eq name="section" value="$vo.price"}class="on"{/eq}><a href="{:url('Goods/index',['nid'=>$nid,'cid'=>$cid,'bid'=>$bid,'section'=>$vo.price,'people'=>$peoplearr])}">{$vo.price}</a></li>
+                        {/volist}
+                            
+                        </ul>
+                    </div>
+                    
+                </div>
+                <div class="clear targetUser">
+                    <div class="left">
+                        <div>适用人群</div>
+                    </div>
+                    <div class="center">
+                    <form style="display: inline;" id="form_people">
+                        <ul>
+                        {volist name="people" id="vo"}
+                            <li>
+                              <label>
+                                 <input name="people[]" type="checkbox" value="{$vo.id}" {in name="vo.id" value="$peoplearr"}checked{/in}>{$vo.name}
+                              </label>
+                            </li>
+                        {/volist} 
+                        </ul>
+                        </form>
+                        <div class="buttonBar">
+                            <a class="sure" href="javascript:void(0)">确定</a><a class="cancel" href="javascript:void(0)">取消</a>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="clear ">
+                    <div class="left">
+                        <div>用途</div>
+                    </div>
+                    <div class="center ">
+                        <ul>
+                            <li class="on">求婚</li>
+                            <li>送礼</li>
+                            <li>打扮</li>
+                            <li>婚宴</li>
+                            <li>订婚</li>
+                        </ul>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="shop-list">
+                <div class="top-nav">
+                    <div class="left fl">
+                        <dl class="fl">
+                            <dt>排列方式：</dt>
+                            <dd {eq name="order" value="count"}class="on"{/eq}><a {eq name="order" value="count"}href="javascript:void(0)"{else/} href="{:url('Goods/index',['order'=>'count','nid'=>$nid])}"{/eq}>默认<i></i></a>
+                           
+                            </dd>
+
+                            <dd {eq name="order" value="hits"}class="on"{/eq}><a {eq name="order" value="hits"}href="javascript:void(0)"{else/} href="{:url('Goods/index',['order'=>'hits','nid'=>$nid])}"{/eq}>热度<i></i></a>
+                            
+                            </dd>
+
+                            <dd {eq name="order" value="sales"}class="on"{/eq}><a {eq name="order" value="sales"}href="javascript:void(0)"{else/} href="{:url('Goods/index',['order'=>'sales','nid'=>$nid])}"{/eq}>销量<i></i></a>
+                            
+                            </dd>
+
+                            <dd {eq name="order" value="price"}class="on"{/eq}><a {eq name="order" value="price"}href="javascript:void(0)"{else/} href="{:url('Goods/index',['order'=>'price','nid'=>$nid])}"{/eq}>价格<i></i></a>
+                            
+                            </dd>
+                        </dl>
+                        <form style="display: inline;" id="price_form">
+                        <div class="price fl">
+                            <span class="text">
+                                价格￥
+                            </span>
+                            <span class="price-input">
+                                <input type="number" name="min" >
+                                <span></span>
+                            <input type="number" name="max" >
+                            </span>
+                            <a href="javascript:void(0)" id="pricesub">确定</a>
+                        </div>
+                        </form>
+                    </div>
+                    <!-- <div class="right fr">
+                        <a href="#" class="prev">&lt;&nbsp;上一页</a>
+                        <span class="index"><b>1</b>/10</span>
+                        <a href="#" class="next">下一页&nbsp;&gt;</a>
+                    </div> -->
+                </div>
+                <div class="list">
+                    <ul class="clear">
+                        {volist name="listarr" id="vo"}
+                        <li class="clear">
+                            <a href="{:url('Goods/info',['id'=>$vo.id])}"><img src="{$vo.pic}" width="215" height="221" alt=""></a>
+                            <span class="price"><i>￥</i>{$vo.price}</span><span class="freePostage">包邮</span>
+                            <span class="stock">库存：{$vo.count}件</span>
+                            <p><a href="{:url('Goods/info',['id'=>$vo.id])}">{$vo.name}</a></p>
+                            <button type="button" class="shopCar">加入购物车</button>
+                            <div class="evaluate fr">
+                                <span>销量: {$vo.sales}</span>
+                            </div>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div class="footer-nav">
+                    {$list->render()}
+                </div>
+                <div class="division">
+
+                </div>
+            </div>
+            {include file="public/guess"/}<!-- 加载猜你喜欢-->
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function(){
+            $('#pricesub').click(function(){
+                $('#price_form').submit();//jq提交
+            })
+            $('.sure').click(function(){
+                $('#form_people').submit();//jq提交
+            })
+        })
+    </script>
+{include file="public/footer"/}<!-- 包含头部模版footer -->

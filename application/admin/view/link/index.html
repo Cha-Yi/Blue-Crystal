@@ -1,0 +1,81 @@
+{include file="public/header" /}
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;" class="layui-form">
+   
+	    <span class="layui-breadcrumb">
+		  <a href="{:url('Index/index')}">首页</a>
+		  <a href="{:url('Link/index')}">友情链接</a>
+		 
+		</span>
+		<div>
+			<a href="{:url('Link/add')}" class="layui-btn layui-btn-sm"><i class="layui-icon layui-icon-add-1"></i> 添加</a>
+		
+			<button url="{:url('Link/delall')}" class="layui-btn layui-btn-danger layui-btn-sm" id="delall"><i class="layui-icon layui-icon-delete "></i>选中删除</button>
+		</div>
+		<table class="layui-table">
+		 
+		  <thead>
+		    <tr>
+			   <th>
+			   		<input type="checkbox" id="checkall" lay-skin="primary" lay-filter="checkall">
+			   </th>
+		      <th>编号</th>
+		      <th>链接名称</th>
+		      <th>链接图片</th>
+		      <th>链接地址</th>
+		
+		      <th>操作</th>
+
+		    </tr> 
+		  </thead>
+		  <tbody>
+			
+		{foreach $listarr as $vo} 
+		    <tr>
+		   	  <td>
+		   	  	<input type="checkbox" class="check" value="{$vo.id}" lay-skin="primary" lay-filter="check">
+		      </td>
+		      <td>{$vo.id}</td>
+		      <td>{$vo.name}</td>
+		      
+		      <td>
+		      	<img src="{$vo.pic}" width="50">
+		      </td>
+		      <td>{$vo.href}</td>
+		    
+
+		      <td>
+		      	<a href="{:url('Link/edit',['id'=>$vo.id])}" class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+		      	<button class="layui-btn layui-btn-danger layui-btn-xs del" iid="{$vo.id}" url="{:url('Link/del')}"><i class="layui-icon layui-icon-delete "></i>删除</button>
+		      </td>
+		    </tr>
+		  {/foreach}
+		  </tbody>
+		</table>
+		<!-- 分页 -->
+		<div id="test1" style="text-align: center">
+
+          {$list->render()}
+
+		</div>
+	
+	</div>
+  </div>
+  
+  <script>
+layui.use(['form','jquery'], function(){
+  var form = layui.form
+  ,layer = layui.layer,$=layui.jquery;
+  
+  //监听指定开关
+  form.on('switch(switchTest)', function(data){
+     var check=this.checked?1:0;
+     var id = data.elem.value;//当前的id,从data中拿
+     $.post("{:url('Link/recommend')}",{'id':id,'index':check},function(res){
+     		layer.msg(res.msg)
+     })
+  });
+});
+</script>
+{include file="public/footer" /}

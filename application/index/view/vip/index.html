@@ -1,0 +1,69 @@
+{include file="public/header"/}
+    <link rel="stylesheet" type="text/css" href="css/member.css">
+    <link rel="stylesheet" type="text/css" href="css/member_home.css">
+    <script src="js/guess.js"></script>
+
+    <div class="middle">
+        <div class="container clear">
+            <div class="sub-nav fl">
+                <h1>我的商城</h1>
+                <dl>
+                    <dt>订单中心</dt>
+                    <dd><a href="{:url('Order/index')}">我的订单</a></dd>
+                    <dd><a href="{:url('Address/index')}">收货地址</a></dd>
+                    <dd><a href="#">缺货登记</a></dd>
+                    <dd><a href="{:url('Vip/info')}">个人中心</a></dd>
+                </dl>
+                <dl>
+                    <dt>会员中心</dt>
+                    <dd><a href="javascript:void(0)">用户信息</a></dd>
+                    <dd><a href="{:url('Vip/index',['select'=>2])}">我的收藏</a></dd>
+                    <dd><a href="javascript:void(0)">我的标签</a></dd>
+                    <dd><a href="javascript:void(0)">我的留言</a></dd>
+                    <dd><a href="javascript:void(0)">我的推荐</a></dd>
+                    <dd><a href="javascript:void(0)">我的评论</a></dd>
+                </dl>
+                <dl>
+                    <dt>账户中心</dt>
+                    <dd><a href="javascript:void(0)">我的红包</a></dd>
+                    <dd><a href="javascript:void(0)">跟踪包裹</a></dd>
+                    <dd><a href="message_detssail.html">资金管理</a></dd>
+                </dl>
+            </div>
+            <div class="content fl">
+                <div class="member-msg">
+                    <img src="{$info.pic.0}" alt="">
+                    <h2>{$info.nickname}，欢迎你！</h2>
+                    <span class="experience">9999/10000</span>
+                    <p>你还没有通过邮件验证点击<a href="javascript:void(0)">发送认证邮件</a></p>
+                    <a href="{:url('Vip/edit')}">修改密码</a>
+                    <div class="info">
+                        <p>余额：<b>￥1314</b></p>
+                        <p>红包：<b>共0个，价值￥0</b></p>
+                        <p>积分：5201314分</p>
+                        <p>你最近共提交了18个订单</p>
+                    </div>
+                </div>
+                <div class="announcement">
+                    <h2>用户中心公告</h2>
+                </div>
+                <div class="history">
+                    <h2>{$title}</h2>
+                    <div class="division"></div>
+                    <ul class="clear">
+                    {volist name="history" id="vo"}
+                        <li class="clear">
+                            <div class="pic">
+                                <a href="{:url('Goods/info',['id'=>$vo.gid])}"><img src="{$vo.pic}" alt="" width="206" height="206"></a>
+                            </div>
+                            <p><a href="{:url('Goods/info',['id'=>$vo.gid])}">{$vo.name}</a></p>
+                            <span><b>￥</b>{$vo.price}</span>
+                            <a href="{:url('Goods/info',['id'=>$vo.gid])}">商品详情</a>
+                        </li>
+                    {/volist}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{include file="public/footer"/}
